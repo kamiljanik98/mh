@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# music-hub
 
-## Getting Started
+Platform for music producers — upload, browse, play and download tracks with stem support.
 
-First, run the development server:
+## Features
+
+- Upload tracks with cover image and metadata (BPM, scale, genre, tags)
+- Stream and download audio directly from Cloudflare R2
+- Stem support — upload and access individual stem files per track
+- Browse feed of all tracks across the platform
+- Personal library — your uploaded tracks
+
+## Planned
+
+- Likes and favorites — save tracks to personal library
+- Library — personal collection of uploaded and saved tracks
+- Albums — group multiple tracks into a release
+- Pricing — producer tiers with upload limits and storage quotas
+
+## Stack
+
+- **Next.js 14** — App Router, TypeScript
+- **Supabase** — database, auth
+- **Cloudflare R2** — file storage (audio, covers)
+- **Zustand** — player state
+- **Shadcn UI** — component library
+
+## Architecture
+
+- Supabase handles `profiles`, `songs`, `stems` tables and authentication
+- Cloudflare R2 handles all file storage — bucket `songs` (private, presigned URLs) and `covers` (public)
+- File paths stored as relative in DB — full URLs constructed at runtime via helpers in `lib/r2/storage.ts`
+
+## Dev Setup
 
 ```bash
+npm install
+supabase start
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Roadmap
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- v0.1 — Initial Setup — infrastructure, database, R2
+- v0.2 — Auth — PKCE, Discord, useUser hook
+- v0.3 — Player — Zustand store, hooks, audio playback
+- v0.4 — Upload — upload form, stems, R2 integration
+- v0.5 — Search — filter by title, genre, scale, tags
