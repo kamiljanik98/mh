@@ -31,7 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env.local
 
 # vercel
 .vercel
@@ -45,3 +45,7 @@ src/app/test
 /docs/
 /INBOX.md
 /README.md
+/TODO.md
+/TODO-EXPLAINED.md
+/CHANGELOG.md
+/snippets/
