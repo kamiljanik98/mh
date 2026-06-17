@@ -1,8 +1,239 @@
-<h2>Confirm your signup</h2>
-<p>Follow this link to confirm your account:</p>
-<p>
-  <a
-    href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&redirect_to={{ .RedirectTo }}"
-    >Confirm your email</a
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm your MusicHub account</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #0a0a0a;
+      font-family:
+        -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+        Helvetica, Arial, sans-serif;
+    "
   >
-</p>
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #0a0a0a; padding: 40px 0"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="480"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              background-color: #141414;
+              border-radius: 12px;
+              border: 1px solid #262626;
+              overflow: hidden;
+            "
+          >
+            <!-- Top accent bar -->
+            <tr>
+              <td style="height: 4px; background-color: #1db954"></td>
+            </tr>
+
+            <!-- Logo / wordmark -->
+            <tr>
+              <td style="padding: 40px 40px 0 40px" align="center">
+                <span
+                  style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #ffffff;
+                    letter-spacing: -0.5px;
+                  "
+                >
+                  Music<span style="color: #1db954">Hub</span>
+                </span>
+              </td>
+            </tr>
+
+            <!-- Waveform-ish divider (simple bars via table cells) -->
+            <tr>
+              <td style="padding: 24px 40px 0 40px" align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td
+                      style="
+                        width: 3px;
+                        height: 10px;
+                        background-color: #1db954;
+                        opacity: 0.4;
+                      "
+                    ></td>
+                    <td style="width: 4px"></td>
+                    <td
+                      style="
+                        width: 3px;
+                        height: 18px;
+                        background-color: #1db954;
+                        opacity: 0.6;
+                      "
+                    ></td>
+                    <td style="width: 4px"></td>
+                    <td
+                      style="
+                        width: 3px;
+                        height: 26px;
+                        background-color: #1db954;
+                      "
+                    ></td>
+                    <td style="width: 4px"></td>
+                    <td
+                      style="
+                        width: 3px;
+                        height: 14px;
+                        background-color: #1db954;
+                        opacity: 0.6;
+                      "
+                    ></td>
+                    <td style="width: 4px"></td>
+                    <td
+                      style="
+                        width: 3px;
+                        height: 20px;
+                        background-color: #1db954;
+                        opacity: 0.4;
+                      "
+                    ></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Heading -->
+            <tr>
+              <td style="padding: 24px 40px 0 40px" align="center">
+                <h1
+                  style="
+                    margin: 0;
+                    font-size: 22px;
+                    font-weight: 600;
+                    color: #ffffff;
+                  "
+                >
+                  Confirm your account
+                </h1>
+              </td>
+            </tr>
+
+            <!-- Body text -->
+            <tr>
+              <td style="padding: 12px 40px 0 40px" align="center">
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 14px;
+                    line-height: 22px;
+                    color: #a3a3a3;
+                  "
+                >
+                  One click and you're in. Upload tracks, share stems, and get
+                  your music heard.
+                </p>
+              </td>
+            </tr>
+
+            <!-- CTA Button -->
+            <tr>
+              <td style="padding: 32px 40px 0 40px" align="center">
+                <a
+                  href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup"
+                  style="
+                    display: inline-block;
+                    background-color: #1db954;
+                    color: #0a0a0a;
+                    font-size: 15px;
+                    font-weight: 600;
+                    text-decoration: none;
+                    padding: 14px 32px;
+                    border-radius: 8px;
+                  "
+                >
+                  Confirm Email
+                </a>
+              </td>
+            </tr>
+
+            <!-- Fallback link -->
+            <tr>
+              <td style="padding: 24px 40px 0 40px" align="center">
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #737373;
+                  "
+                >
+                  Button not working? Copy this link into your browser:
+                </p>
+                <p
+                  style="
+                    margin: 6px 0 0 0;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #1db954;
+                    word-break: break-all;
+                  "
+                >
+                  {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash
+                  }}&type=signup
+                </p>
+              </td>
+            </tr>
+
+            <!-- Divider -->
+            <tr>
+              <td style="padding: 32px 40px 0 40px">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                >
+                  <tr>
+                    <td
+                      style="
+                        border-top: 1px solid #262626;
+                        font-size: 0;
+                        line-height: 0;
+                      "
+                    >
+                      &nbsp;
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="padding: 20px 40px 32px 40px" align="center">
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #525252;
+                  "
+                >
+                  Didn't sign up for MusicHub? You can safely ignore this email.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
