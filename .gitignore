@@ -48,4 +48,5 @@ src/app/test
 /TODO.md
 /TODO-EXPLAINED.md
 /CHANGELOG.md
-/snippets/
+/CONVENTIONS.md
+/src/lib/supabase/snippets/
