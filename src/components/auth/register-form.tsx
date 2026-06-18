@@ -1,23 +1,25 @@
-// components/auth/register-form.tsx
 "use client";
 
-import { useState } from "react";
 import { toast } from "sonner";
 import useRegister from "@/hooks/use-register";
 import useAuthModal from "@/hooks/use-auth-modal";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterFormValues, registerSchema } from "@/lib/validations/auth";
+import FormInput from "@/components/form/FormInput";
 
 const RegisterForm = () => {
   const { register, isLoading } = useRegister();
   const { close } = useAuthModal();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { email: "", nickname: "", password: "" },
+  });
 
-    const { error } = await register({ email, password });
+  const onSubmit = async (values: RegisterFormValues) => {
+    const { error } = await register(values);
 
     if (error) {
       toast.error(error.message);
@@ -27,25 +29,38 @@ const RegisterForm = () => {
     toast.success("Check your inbox — we sent you a confirmation link.");
     close();
   };
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <Input
-        type="email"
-        placeholder="you@example.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3 bg-neutral-900"
+    >
+      <FormInput
+        name="nickname"
+        control={form.control}
+        label="Nickname"
+        type="text"
+        placeholder="yourname"
       />
-      <Input
+      <FormInput
+        name="email"
+        control={form.control}
+        label="Email"
+        type="email"
+        placeholder="user@mail.com"
+      />
+      <FormInput
+        name="password"
+        control={form.control}
+        label="Password"
         type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />{" "}
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Creating account..." : "Register"}
+        placeholder="******"
+      />
+      <Button
+        className="text-sm bg-neutral-800 h-12"
+        type="submit"
+        disabled={isLoading}
+      >
+        Register
       </Button>
     </form>
   );
