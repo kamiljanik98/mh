@@ -1,21 +1,19 @@
 import { createClient } from "@/lib/supabase/client";
-import { EmailPasswordCredentials } from "@/types";
+import { LoginFormValues } from "@/lib/validations/auth";
 import { useState } from "react";
 
 const useLogin = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const supabase = createClient();
 
-  const login = async ({ email, password }: EmailPasswordCredentials) => {
+  const login = async ({ email, password }: LoginFormValues) => {
     setIsLoading(true);
-
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     setIsLoading(false);
-
     return { error };
   };
 
