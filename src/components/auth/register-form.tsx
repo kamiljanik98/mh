@@ -16,6 +16,7 @@ const RegisterForm = () => {
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: { email: "", nickname: "", password: "" },
+    mode: "onBlur",
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
@@ -26,7 +27,7 @@ const RegisterForm = () => {
       return;
     }
 
-    toast.success("Check your inbox — we sent you a confirmation link.");
+    toast.success("Check your inbox - we sent you a confirmation link.");
     close();
   };
   return (
