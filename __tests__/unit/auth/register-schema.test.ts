@@ -1,4 +1,3 @@
-// __tests__/unit/auth/register-schema.test.ts
 import { describe, it, expect } from "vitest";
 import { registerSchema } from "@/lib/validations/auth";
 

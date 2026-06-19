@@ -55,9 +55,7 @@ describe("Slice 1 — Sign Up (PKCE) integration", () => {
 
     const confirmRes = await fetch(confirmUrl, { redirect: "manual" });
     expect(confirmRes.status).toBe(307);
-    expect(confirmRes.headers.get("location")).toBe(
-      `${APP_URL}/auth/confirmed`,
-    );
+    expect(confirmRes.headers.get("location")).toBe("/auth/confirmed");
 
     const { data: signInData, error: signInError } =
       await supabase.auth.signInWithPassword({
@@ -83,7 +81,7 @@ describe("Slice 1 — Sign Up (PKCE) integration", () => {
     const res = await fetch(confirmUrl, { redirect: "manual" });
     const location = res.headers.get("location") ?? "";
 
-    expect(location).not.toContain("/auth/confirm");
+    expect(location).toBe("/auth/confirmed");
     expect(res.status).toBe(307);
   });
 
@@ -100,19 +98,19 @@ describe("Slice 1 — Sign Up (PKCE) integration", () => {
     const confirmUrl = await getLatestConfirmUrlFor(email);
 
     const res = await fetch(confirmUrl, { redirect: "manual" });
-    expect(res.headers.get("location")).toBe(`${APP_URL}/auth/confirmed`);
+    expect(res.headers.get("location")).toBe("/auth/confirmed");
   });
 
   it("redirects silently to / when token_hash/type are missing or verifyOtp fails", async () => {
     const missingParamsRes = await fetch(`${APP_URL}/auth/confirm`, {
       redirect: "manual",
     });
-    expect(missingParamsRes.headers.get("location")).toBe(`${APP_URL}/`);
+    expect(missingParamsRes.headers.get("location")).toBe("/");
 
     const invalidTokenRes = await fetch(
       `${APP_URL}/auth/confirm?token_hash=invalid_token_hash_12345&type=signup`,
       { redirect: "manual" },
     );
-    expect(invalidTokenRes.headers.get("location")).toBe(`${APP_URL}/`);
+    expect(invalidTokenRes.headers.get("location")).toBe("/");
   });
 });

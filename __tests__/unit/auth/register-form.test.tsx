@@ -1,15 +1,15 @@
-// __tests__/unit/auth/register-form.test.tsx
+// @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RegisterForm from "@/components/auth/register-form";
 
 vi.mock("@/hooks/use-register", () => ({
-  useRegister: () => ({ register: vi.fn(), loading: false }),
+  default: () => ({ register: vi.fn(), isLoading: false }),
 }));
 
 vi.mock("@/hooks/use-auth-modal", () => ({
-  useAuthModal: () => ({ close: vi.fn(), setView: vi.fn() }),
+  default: () => ({ close: vi.fn(), setView: vi.fn() }),
 }));
 
 vi.mock("sonner", () => ({
@@ -31,7 +31,7 @@ describe("RegisterForm", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/invalid email/i)).toBeDefined();
-      expect(emailInput).toHaveProperty("aria-invalid", "true");
+      expect(emailInput).toHaveAttribute("aria-invalid", "true");
     });
   });
 
@@ -45,7 +45,7 @@ describe("RegisterForm", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/at least/i)).toBeDefined();
-      expect(passwordInput).toHaveProperty("aria-invalid", "true");
+      expect(passwordInput).toHaveAttribute("aria-invalid", "true");
     });
   });
 
@@ -59,7 +59,7 @@ describe("RegisterForm", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/only letters, numbers/i)).toBeDefined();
-      expect(nicknameInput).toHaveProperty("aria-invalid", "true");
+      expect(nicknameInput).toHaveAttribute("aria-invalid", "true");
     });
   });
 
@@ -71,7 +71,7 @@ describe("RegisterForm", () => {
     await user.tab();
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/email/i)).toHaveProperty(
+      expect(screen.getByLabelText(/email/i)).toHaveAttribute(
         "aria-invalid",
         "false",
       );
