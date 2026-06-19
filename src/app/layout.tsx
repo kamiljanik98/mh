@@ -36,7 +36,15 @@ export default function RootLayout({
         <Navbar />
         {children}
         <AuthModal />
-        <Toaster />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            classNames: {
+              success: "!bg-neutral-950 !border-green-800 !text-green-300",
+              error: "!bg-red-950 !border-red-800 !text-red-300",
+            },
+          }}
+        />{" "}
       </body>
     </html>
   );

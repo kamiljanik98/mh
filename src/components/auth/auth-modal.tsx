@@ -1,4 +1,3 @@
-// components/auth/auth-modal.tsx
 "use client";
 
 import {
@@ -7,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useAuthModal from "@/hooks/use-auth-modal";
+import useAuthModal from "@/hooks/auth/use-auth-modal";
 import RegisterForm from "./register-form";
 import LoginForm from "./login-form";
 
@@ -16,7 +15,7 @@ export default function AuthModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="bg-neutral-900 text-neutral-200 sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
             {view === "login" ? "Sign in to MusicHub" : "Create your account"}
@@ -28,7 +27,7 @@ export default function AuthModal() {
         <button
           type="button"
           onClick={() => setView(view === "login" ? "register" : "login")}
-          className="text-center text-sm text-zinc-500 underline"
+          className="text-center text-sm underline"
         >
           {view === "login"
             ? "Don't have an account? Register"
