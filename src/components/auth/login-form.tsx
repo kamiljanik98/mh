@@ -1,17 +1,20 @@
 "use client";
 
 import { toast } from "sonner";
-import useLogin from "@/hooks/use-login";
-import useAuthModal from "@/hooks/use-auth-modal";
+import useLogin from "@/hooks/auth/use-login";
+import useAuthModal from "@/hooks/auth/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormValues, loginSchema } from "@/lib/validations/auth";
 import FormInput from "@/components/form/FormInput";
+import SocialButton from "./social-button";
+import useDiscordLogin from "@/hooks/auth/use-discord-login";
 
 const LoginForm = () => {
   const { login, isLoading } = useLogin();
   const { close } = useAuthModal();
+  const { handleDiscordLogin, isSocialLoading } = useDiscordLogin();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -56,6 +59,11 @@ const LoginForm = () => {
       >
         Sign in
       </Button>
+      <SocialButton
+        provider="discord"
+        onClick={handleDiscordLogin}
+        disabled={isSocialLoading}
+      />
     </form>
   );
 };
