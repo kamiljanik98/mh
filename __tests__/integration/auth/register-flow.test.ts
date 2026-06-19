@@ -35,7 +35,7 @@ async function getLatestConfirmUrlFor(email: string): Promise<string> {
   return match[1];
 }
 
-describe("Slice 1 — Sign Up (PKCE) integration", () => {
+describe("Slice 1 - Sign Up (PKCE) integration", () => {
   it("registers, confirms email, and signs in", async () => {
     const email = randomEmail();
     const password = "TestPassword123!";

@@ -19,7 +19,7 @@ vi.mock("@/hooks/use-auth-modal", () => ({
   default: () => ({ close: closeMock }),
 }));
 
-describe("Event A — register form submit toast", () => {
+describe("Event A - register form submit toast", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -36,7 +36,7 @@ describe("Event A — register form submit toast", () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        "Check your inbox — we sent you a confirmation link.",
+        "Check your inbox - we sent you a confirmation link.",
       );
       expect(closeMock).toHaveBeenCalled();
     });

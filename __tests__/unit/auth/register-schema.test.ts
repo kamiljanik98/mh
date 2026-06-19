@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { registerSchema } from "@/lib/validations/auth";
 
-describe("registerSchema — email", () => {
+describe("registerSchema - email", () => {
   it("rejects an invalid email", () => {
     const result = registerSchema.safeParse({
       email: "not-an-email",
@@ -24,7 +24,7 @@ describe("registerSchema — email", () => {
   });
 });
 
-describe("registerSchema — nickname", () => {
+describe("registerSchema - nickname", () => {
   it("rejects nickname under 3 characters", () => {
     const result = registerSchema.safeParse({
       email: "valid@example.com",
@@ -98,7 +98,7 @@ describe("registerSchema — nickname", () => {
   });
 });
 
-describe("registerSchema — password", () => {
+describe("registerSchema - password", () => {
   it("rejects password under 6 characters", () => {
     const result = registerSchema.safeParse({
       email: "valid@example.com",
