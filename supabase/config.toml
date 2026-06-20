@@ -421,3 +421,7 @@ enabled = true
 client_id = "env(DISCORD_CLIENT_ID)"
 secret = "env(DISCORD_CLIENT_SECRET)"
 redirect_uri = "http://localhost:54321/auth/v1/callback"
+
+[auth.email.template.recovery]
+subject = "Reset your MusicHub password"
+content_path = "./supabase/templates/recovery.html"

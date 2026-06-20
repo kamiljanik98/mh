@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
       token_hash,
     });
     if (!error) {
-      redirect("/auth/confirmed");
+      const destination =
+        type === "recovery" ? "/auth/update-password" : "/auth/confirmed";
+      redirect(destination);
     }
   }
 
