@@ -13,8 +13,8 @@ import useDiscordLogin from "@/hooks/auth/use-discord-login";
 
 const LoginForm = () => {
   const { login, isLoading } = useLogin();
-  const { close } = useAuthModal();
-  const { handleDiscordLogin, isSocialLoading } = useDiscordLogin();
+  const { close, setView } = useAuthModal();
+  const { discordLogin, isSocialLoading } = useDiscordLogin();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -53,6 +53,13 @@ const LoginForm = () => {
         placeholder="******"
       />
       <Button
+        type="button"
+        onClick={() => setView("forgot-password")}
+        className="self-end text-xs text-neutral-400 hover:underline"
+      >
+        Forgot password?
+      </Button>
+      <Button
         className="text-sm bg-neutral-800 h-12"
         type="submit"
         disabled={isLoading}
@@ -61,7 +68,7 @@ const LoginForm = () => {
       </Button>
       <SocialButton
         provider="discord"
-        onClick={handleDiscordLogin}
+        onClick={discordLogin}
         disabled={isSocialLoading}
       />
     </form>
