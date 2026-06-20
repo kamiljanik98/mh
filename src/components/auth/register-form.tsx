@@ -14,7 +14,7 @@ import useDiscordLogin from "@/hooks/auth/use-discord-login";
 const RegisterForm = () => {
   const { register, isLoading } = useRegister();
   const { close } = useAuthModal();
-  const { handleDiscordLogin, isSocialLoading } = useDiscordLogin();
+  const { discordLogin, isSocialLoading } = useDiscordLogin();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -70,7 +70,7 @@ const RegisterForm = () => {
         </Button>
         <SocialButton
           provider="discord"
-          onClick={handleDiscordLogin}
+          onClick={discordLogin}
           disabled={isSocialLoading}
         />
       </form>
