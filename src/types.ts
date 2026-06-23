@@ -31,3 +31,8 @@ export type UserProfile = {
   created_at: string;
   uploaded_at: string;
 };
+
+export type EmailPasswordCredentials = {
+  email: string;
+  password: string;
+};

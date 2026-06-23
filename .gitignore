@@ -49,4 +49,6 @@ src/app/test
 /TODO-EXPLAINED.md
 /CHANGELOG.md
 /CONVENTIONS.md
-/src/lib/supabase/snippets/
+
+/supabase/.branches
+/supabase/.temp

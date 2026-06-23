@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
+import Navbar from "@/components/common/navbar";
+import AuthModal from "@/components/auth/auth-modal";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +33,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Navbar />
         {children}
+        <AuthModal />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            classNames: {
+              success: "!bg-neutral-950 !border-green-800 !text-green-300",
+              error: "!bg-red-950 !border-red-800 !text-red-300",
+            },
+          }}
+        />{" "}
       </body>
     </html>
   );
