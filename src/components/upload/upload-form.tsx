@@ -1,34 +1,28 @@
-// components/upload/upload-form.tsx
 "use client";
 
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/form/form-input";
 import useUpload from "@/hooks/upload/use-upload";
-import { useRef } from "react";
-
-const uploadSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100),
-  bpm: z
-    .string()
-    .optional()
-    .refine((v) => !v || /^\d+$/.test(v), "BPM must be a number"),
-  scale: z.string().optional(),
-  genre: z.string().optional(),
-  tags: z.string().optional(),
-});
-
-type UploadFormValues = z.infer<typeof uploadSchema>;
+import { uploadSchema, type UploadFormValues } from "@/lib/validations/upload";
+import { useRouter } from "next/navigation";
 
 export default function UploadForm() {
   const { upload, isLoading } = useUpload();
+  const router = useRouter();
 
   const form = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
-    defaultValues: { title: "", bpm: "", scale: "", genre: "", tags: "" },
+    defaultValues: {
+      title: "",
+      bpm: undefined,
+      scale: "",
+      genre: "",
+      tags: "",
+    },
     mode: "onBlur",
   });
 
@@ -48,14 +42,19 @@ export default function UploadForm() {
     if (values.bpm) formData.append("bpm", values.bpm);
     if (values.scale) formData.append("scale", values.scale);
     if (values.genre) formData.append("genre", values.genre);
-    if (values.tags) formData.append("tags", values.tags);
+    if (values.tags?.trim()) formData.append("tags", values.tags);
     formData.append("audio", audioFile);
     if (coverRef.current?.files?.[0]) {
       formData.append("cover", coverRef.current.files[0]);
     }
 
-    const { error } = await upload(formData);
-    if (error) toast.error(error.message);
+    const { data, error } = await upload(formData);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Track uploaded successfully");
+      router.push(`/upload/success/${data!.id}`);
+    }
   }
 
   return (
@@ -74,6 +73,7 @@ export default function UploadForm() {
         control={form.control}
         label="BPM"
         placeholder="140"
+        type="number"
       />
       <FormInput
         name="scale"
