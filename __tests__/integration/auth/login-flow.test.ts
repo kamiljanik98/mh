@@ -46,8 +46,8 @@ async function registerAndConfirm(
   await fetch(match[1], { redirect: "manual" });
 }
 
-describe("Slice 2 - Sign In integration", () => {
-  it("signs in with confirmed credentials", async () => {
+describe("login flow integration", () => {
+  it("logs in with confirmed credentials", async () => {
     const email = randomEmail();
     const password = "TestPassword123";
     const nickname = `login${Date.now()}`;

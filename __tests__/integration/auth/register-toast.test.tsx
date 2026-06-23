@@ -26,7 +26,7 @@ vi.mock("@/hooks/auth/use-auth-modal", () => ({
   default: () => ({ close: closeMock }),
 }));
 
-describe("Event A - register form submit toast", () => {
+describe("register form submit toast", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
