@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/components/form/form-input";
 import SocialButton from "./social-button";
 import useDiscordLogin from "@/hooks/auth/use-discord-login";
 
 const RegisterForm = () => {
   const { register, isLoading } = useRegister();
   const { close } = useAuthModal();
-  const { handleDiscordLogin, isSocialLoading } = useDiscordLogin();
+  const { discordLogin, isSocialLoading } = useDiscordLogin();
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -70,7 +70,7 @@ const RegisterForm = () => {
         </Button>
         <SocialButton
           provider="discord"
-          onClick={handleDiscordLogin}
+          onClick={discordLogin}
           disabled={isSocialLoading}
         />
       </form>

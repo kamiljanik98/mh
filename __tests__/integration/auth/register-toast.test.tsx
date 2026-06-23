@@ -5,21 +5,28 @@ import userEvent from "@testing-library/user-event";
 import { toast } from "sonner";
 import RegisterForm from "@/components/auth/register-form";
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
 vi.mock("sonner", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 const registerMock = vi.fn();
-vi.mock("@/hooks/use-register", () => ({
+vi.mock("@/hooks/auth/use-register", () => ({
   default: () => ({ register: registerMock, isLoading: false }),
 }));
 
 const closeMock = vi.fn();
-vi.mock("@/hooks/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-modal", () => ({
   default: () => ({ close: closeMock }),
 }));
 
-describe("Event A - register form submit toast", () => {
+describe("register form submit toast", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

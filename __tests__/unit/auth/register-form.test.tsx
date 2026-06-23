@@ -4,11 +4,18 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RegisterForm from "@/components/auth/register-form";
 
-vi.mock("@/hooks/use-register", () => ({
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
+vi.mock("@/hooks/auth/use-register", () => ({
   default: () => ({ register: vi.fn(), isLoading: false }),
 }));
 
-vi.mock("@/hooks/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-modal", () => ({
   default: () => ({ close: vi.fn(), setView: vi.fn() }),
 }));
 

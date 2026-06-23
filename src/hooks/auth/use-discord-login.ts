@@ -10,7 +10,7 @@ const useDiscordLogin = () => {
   const { socialLogin, isSocialLoading } = useSocialLogin();
   const supabase = createClient();
 
-  const handleDiscordLogin = async () => {
+  const discordLogin = async () => {
     const { error } = await socialLogin("discord");
     if (error) {
       toast.error(error.message);
@@ -21,7 +21,7 @@ const useDiscordLogin = () => {
     close();
   };
 
-  return { handleDiscordLogin, isSocialLoading };
+  return { discordLogin, isSocialLoading };
 };
 
 export default useDiscordLogin;

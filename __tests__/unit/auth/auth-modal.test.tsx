@@ -10,13 +10,17 @@ const mockSetView = vi.fn();
 let mockIsOpen = true;
 let mockView: "login" | "register" = "login";
 
-vi.mock("@/hooks/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-modal", () => ({
   default: () => ({
     isOpen: mockIsOpen,
     view: mockView,
     close: mockClose,
     setView: mockSetView,
   }),
+}));
+
+vi.mock("@/components/auth/login-form", () => ({
+  default: () => <div data-testid="login-form" />,
 }));
 
 vi.mock("@/components/auth/register-form", () => ({
@@ -33,24 +37,24 @@ describe("AuthModal", () => {
   it("does not render dialog content when isOpen is false", () => {
     mockIsOpen = false;
     render(<AuthModal />);
-    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument;
-    expect(screen.queryByTestId("register-form")).not.toBeInTheDocument;
+    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("register-form")).not.toBeInTheDocument();
   });
 
   it("renders LoginForm and correct title when view is login", () => {
     mockView = "login";
     render(<AuthModal />);
-    expect(screen.queryByTestId("login")).toBeInTheDocument;
-    expect(screen.queryByTestId("register-form")).not.toBeInTheDocument;
-    expect(screen.getByText("Sign in to MusicHub")).toBeInTheDocument;
+    expect(screen.getByTestId("login-form")).toBeInTheDocument();
+    expect(screen.queryByTestId("register-form")).not.toBeInTheDocument();
+    expect(screen.getByText("Sign in to MusicHub")).toBeInTheDocument();
   });
 
-  it("renders RegisterForm and correct title when view is login", () => {
+  it("renders RegisterForm and correct title when view is register", () => {
     mockView = "register";
     render(<AuthModal />);
-    expect(screen.getByTestId("register-form")).toBeInTheDocument;
-    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument;
-    expect(screen.getByText("Create your account")).toBeInTheDocument;
+    expect(screen.getByTestId("register-form")).toBeInTheDocument();
+    expect(screen.queryByTestId("login-form")).not.toBeInTheDocument();
+    expect(screen.getByText("Create your account")).toBeInTheDocument();
   });
 
   it("calls setView with register when toggled from login view", async () => {

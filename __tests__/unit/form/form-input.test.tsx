@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/components/form/form-input";
 
 const testSchema = z.object({
   email: z.email("Invalid email adress"),

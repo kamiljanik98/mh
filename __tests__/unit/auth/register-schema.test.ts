@@ -48,10 +48,10 @@ describe("registerSchema - nickname", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects nickname over 20 characters", () => {
+  it("rejects nickname over 32 characters", () => {
     const result = registerSchema.safeParse({
       email: "valid@example.com",
-      nickname: "a".repeat(21),
+      nickname: "a".repeat(33),
       password: "ValidPass1",
     });
     expect(result.success).toBe(false);
@@ -62,22 +62,17 @@ describe("registerSchema - nickname", () => {
     }
   });
 
-  it("accepts nickname at exactly 20 characters (boundary)", () => {
+  it("accepts nickname at exactly 32 characters (boundary)", () => {
     const result = registerSchema.safeParse({
       email: "valid@example.com",
-      nickname: "a".repeat(20),
+      nickname: "a".repeat(32),
       password: "ValidPass1",
     });
     expect(result.success).toBe(true);
   });
 
-  it("rejects nickname with disallowed characters (space, dash, diacritics)", () => {
-    const invalidNicknames = [
-      "jan kowalski",
-      "jan-kowalski",
-      "jankówalski",
-      "jan@nick",
-    ];
+  it("rejects nickname with disallowed characters (space, @, diacritics)", () => {
+    const invalidNicknames = ["jan kowalski", "jankówalski", "jan@nick"];
     for (const nickname of invalidNicknames) {
       const result = registerSchema.safeParse({
         email: "valid@example.com",
@@ -88,13 +83,16 @@ describe("registerSchema - nickname", () => {
     }
   });
 
-  it("accepts nickname with letters, numbers and underscores", () => {
-    const result = registerSchema.safeParse({
-      email: "valid@example.com",
-      nickname: "jan_kowalski_99",
-      password: "ValidPass1",
-    });
-    expect(result.success).toBe(true);
+  it("accepts nickname with letters, numbers, underscores, dots and dashes (Discord format)", () => {
+    const validNicknames = ["jan_kowalski_99", "jan.kowalski", "jan-kowalski"];
+    for (const nickname of validNicknames) {
+      const result = registerSchema.safeParse({
+        email: "valid@example.com",
+        nickname,
+        password: "ValidPass1",
+      });
+      expect(result.success).toBe(true);
+    }
   });
 });
 

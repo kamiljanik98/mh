@@ -7,14 +7,21 @@ import LoginForm from "@/components/auth/login-form";
 const mockLogin = vi.fn();
 const mockClose = vi.fn();
 
-vi.mock("@/hooks/use-login", () => ({
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
+vi.mock("@/hooks/auth/use-login", () => ({
   default: () => ({
     login: mockLogin,
     isLoading: false,
   }),
 }));
 
-vi.mock("@/hooks/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-modal", () => ({
   default: () => ({
     close: mockClose,
   }),

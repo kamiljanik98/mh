@@ -49,6 +49,9 @@ src/app/test
 /TODO-EXPLAINED.md
 /CHANGELOG.md
 /CONVENTIONS.md
+/OVERVIEW.md
+/PROGRESS-LOG.md
+/DESIGN.md
 
 /supabase/.branches
 /supabase/.temp
