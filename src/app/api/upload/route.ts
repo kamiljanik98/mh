@@ -132,6 +132,11 @@ export async function POST(req: NextRequest) {
 
   if (dbError || !song) {
     await rollback();
-    return NextResponse.json({ song }, { status: 201 });
+    return NextResponse.json(
+      { error: dbError?.message ?? "DB insert failed" },
+      { status: 500 },
+    );
   }
+
+  return NextResponse.json({ song }, { status: 201 });
 }
