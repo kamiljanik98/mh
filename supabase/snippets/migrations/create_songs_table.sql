@@ -8,5 +8,6 @@ create table public.songs (
   scale text,
   genre text,
   tags text[],
+  description text,
   created_at timestamp with time zone default now() not null
 );

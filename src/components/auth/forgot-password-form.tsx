@@ -8,7 +8,7 @@ import {
   forgotPasswordSchema,
 } from "@/lib/validations/auth";
 import useForgotPassword from "@/hooks/auth/use-forgot-password";
-import FormInput from "../form/form-input";
+import FormInput from "../common/form-input";
 import { Button } from "../ui/button";
 
 const ForgotPasswordForm = () => {
