@@ -12,6 +12,9 @@ export const uploadSchema = z.object({
   scale: z.string().optional(),
   genre: z.string().optional(),
   tags: z.string().optional(),
+  description: z.string().optional(),
+  audio: z.instanceof(File).refine((f) => f.size > 0, "Audio file required"),
+  cover: z.instanceof(File).optional(),
 });
 
 export type UploadFormValues = z.infer<typeof uploadSchema>;
