@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Navbar from "@/components/common/navbar";
 import AuthModal from "@/components/auth/auth-modal";
+import Footer from "@/components/common/footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -25,17 +26,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={cn("font-sans", inter.variable)}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
+    <html lang="en" className={`${inter.variable} antialiased`}>
+      <body className="bg-foreground text-background">
         {children}
-        <AuthModal />
         <Toaster
           position="top-center"
           toastOptions={{
@@ -44,7 +41,7 @@ export default function RootLayout({
               error: "!bg-red-950 !border-red-800 !text-red-300",
             },
           }}
-        />{" "}
+        />
       </body>
     </html>
   );
