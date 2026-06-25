@@ -68,6 +68,7 @@ export type Database = {
         Row: {
           bpm: number | null
           created_at: string
+          description: string | null
           genre: string | null
           id: string
           image_path: string | null
@@ -80,6 +81,7 @@ export type Database = {
         Insert: {
           bpm?: number | null
           created_at?: string
+          description?: string | null
           genre?: string | null
           id?: string
           image_path?: string | null
@@ -92,6 +94,7 @@ export type Database = {
         Update: {
           bpm?: number | null
           created_at?: string
+          description?: string | null
           genre?: string | null
           id?: string
           image_path?: string | null

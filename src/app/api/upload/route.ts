@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
   const scale = formData.get("scale");
   const genre = formData.get("genre");
   const tags = formData.get("tags");
+  const description = formData.get("description") as string | null;
 
   if (!(audioFile instanceof File)) {
     return NextResponse.json({ error: "Audio file required" }, { status: 400 });
@@ -122,6 +123,7 @@ export async function POST(req: NextRequest) {
             .map((t) => t.trim())
             .filter(Boolean)
         : null,
+    description: description ?? null,
   };
 
   const { data: song, error: dbError } = await supabase
@@ -132,6 +134,11 @@ export async function POST(req: NextRequest) {
 
   if (dbError || !song) {
     await rollback();
-    return NextResponse.json({ song }, { status: 201 });
+    return NextResponse.json(
+      { error: dbError?.message ?? "DB insert failed" },
+      { status: 500 },
+    );
   }
+
+  return NextResponse.json({ song }, { status: 201 });
 }

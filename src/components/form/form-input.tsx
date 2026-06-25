@@ -24,6 +24,7 @@ const FormInput = <T extends FieldValues>({
           <Input
             {...field}
             {...props}
+            value={field.value ?? ""}
             id={field.name}
             aria-invalid={fieldState.invalid}
           />
