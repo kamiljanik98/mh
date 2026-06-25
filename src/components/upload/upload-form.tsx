@@ -5,14 +5,26 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import FormInput from "@/components/form/form-input";
+import FormInput from "@/components/common/form-input";
+import FormInputFileAudio from "@/components/upload/form/form-input-file-audio";
+import FormInputFileImage from "@/components/upload/form/form-input-file-image";
 import useUpload from "@/hooks/upload/use-upload";
 import { uploadSchema, type UploadFormValues } from "@/lib/validations/upload";
+import { ACCEPTED_AUDIO, ACCEPTED_IMAGE } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { XIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function UploadForm() {
+type UploadFormProps = {
+  step: 1 | 2;
+  onStepChange: (step: 1 | 2) => void;
+};
+
+export default function UploadForm({ step, onStepChange }: UploadFormProps) {
   const { upload, isLoading } = useUpload();
   const router = useRouter();
+  const audioInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
@@ -22,32 +34,34 @@ export default function UploadForm() {
       scale: "",
       genre: "",
       tags: "",
+      description: "",
     },
     mode: "onBlur",
   });
 
-  const audioRef = useRef<HTMLInputElement>(null);
-  const coverRef = useRef<HTMLInputElement>(null);
+  function onAudioDrop(file: File) {
+    const name = file.name.replace(/\.[^.]+$/, "");
+    form.setValue("title", name, { shouldValidate: true });
+    onStepChange(2);
+  }
+
+  function onAudioReplace(file: File) {
+    form.setValue("audio", file as never, { shouldValidate: true });
+    const name = file.name.replace(/\.[^.]+$/, "");
+    form.setValue("title", name, { shouldValidate: true });
+  }
 
   async function onSubmit(values: UploadFormValues) {
-    const audioFile = audioRef.current?.files?.[0];
-
-    if (!audioFile) {
-      toast.error("Audio file is required");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("title", values.title);
     if (values.bpm) formData.append("bpm", values.bpm);
     if (values.scale) formData.append("scale", values.scale);
     if (values.genre) formData.append("genre", values.genre);
     if (values.tags?.trim()) formData.append("tags", values.tags);
-    formData.append("audio", audioFile);
-    if (coverRef.current?.files?.[0]) {
-      formData.append("cover", coverRef.current.files[0]);
-    }
-
+    if (values.description?.trim())
+      formData.append("description", values.description);
+    formData.append("audio", values.audio);
+    if (values.cover) formData.append("cover", values.cover);
     const { data, error } = await upload(formData);
     if (error) {
       toast.error(error.message);
@@ -57,60 +71,163 @@ export default function UploadForm() {
     }
   }
 
+  const fileName = form.watch("audio")?.name ?? "";
+
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
-    >
-      <FormInput
-        name="title"
-        control={form.control}
-        label="Title"
-        placeholder="Track title"
-      />
-      <FormInput
-        name="bpm"
-        control={form.control}
-        label="BPM"
-        placeholder="140"
-        type="number"
-      />
-      <FormInput
-        name="scale"
-        control={form.control}
-        label="Scale"
-        placeholder="A minor"
-      />
-      <FormInput
-        name="genre"
-        control={form.control}
-        label="Genre"
-        placeholder="Trap"
-      />
-      <FormInput
-        name="tags"
-        control={form.control}
-        label="Tags"
-        placeholder="dark, melodic"
-      />
-
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium" htmlFor="audio">
-          Audio file
-        </label>
-        <input id="audio" ref={audioRef} type="file" accept=".mp3,.wav" />
+    <>
+      {/* Top bar */}
+      <div className="fixed top-0 left-0 right-0 z-10 border-b border-white/10 bg-foreground/50 backdrop-blur-md px-6 py-4">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
+          <span className="flex gap-2 items-center">
+            <Image src="/logo.svg" alt="App logo" width={42} height={42} />
+            {step === 1 ? (
+              <p className="font-semibold text-sm text-background">Upload</p>
+            ) : (
+              <p className="font-semibold text-sm text-background">
+                Track Info
+              </p>
+            )}
+          </span>
+          <div className="flex gap-3 items-center">
+            {step === 2 && (
+              <>
+                <input
+                  ref={audioInputRef}
+                  type="file"
+                  accept={Object.keys(ACCEPTED_AUDIO).join(",")}
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    onAudioReplace(file);
+                  }}
+                />
+                {fileName && (
+                  <p className="text-xs text-neutral-500 truncate max-w-xs">
+                    {fileName}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => audioInputRef.current?.click()}
+                  className="text-xs text-neutral-400 hover:text-neutral-200 transition-colors"
+                >
+                  Replace
+                </button>
+              </>
+            )}
+            <Link
+              href="/"
+              className="hover:bg-neutral-300 bg-neutral-200 rounded-full p-3 transition-colors"
+            >
+              <XIcon size={20} className="text-neutral-800" />
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium" htmlFor="cover">
-          Cover image
-        </label>
-        <input id="cover" ref={coverRef} type="file" accept=".jpg,.jpeg,.png" />
-      </div>
+      {/* Form */}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+      >
+        {step === 1 && (
+          <div>
+            <div className="mb-8 space-y-2">
+              <h1 className="text-2xl font-semibold">
+                Upload your audio files.
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                For best quality, use WAV, FLAC, AIFF, or ALAC. The maximum file
+                size is 4GB uncompressed.
+              </p>
+            </div>
+            <FormInputFileAudio
+              name="audio"
+              control={form.control}
+              setValue={form.setValue}
+              label="Audio file"
+              accept={ACCEPTED_AUDIO}
+              onFileDrop={onAudioDrop}
+              className="w-full rounded-md"
+            />
+          </div>
+        )}
 
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Uploading..." : "Upload"}
-      </Button>
-    </form>
+        {step === 2 && (
+          <div className="flex flex-col gap-8">
+            <div className="flex justify-center">
+              <div className="w-100">
+                <FormInputFileImage
+                  name="cover"
+                  control={form.control}
+                  setValue={form.setValue}
+                  label="Cover image"
+                  accept={ACCEPTED_IMAGE}
+                  className="rounded-md"
+                />
+              </div>
+            </div>
+            <FormInput
+              name="title"
+              control={form.control}
+              label="Track title*"
+              placeholder="Track title"
+            />
+            <FormInput
+              name="bpm"
+              control={form.control}
+              label="BPM"
+              placeholder="140"
+              type="number"
+            />
+            <FormInput
+              name="scale"
+              control={form.control}
+              label="Scale"
+              placeholder="A minor"
+            />
+            <FormInput
+              name="genre"
+              control={form.control}
+              label="Genre"
+              placeholder="Add or search for genre"
+            />
+            <FormInput
+              name="tags"
+              control={form.control}
+              label="Tags"
+              placeholder="Add styles, moods."
+            />
+            <FormInput
+              name="description"
+              control={form.control}
+              label="Description"
+              placeholder="Tracks with descriptions tend to get more plays and engagements."
+            />
+          </div>
+        )}
+      </form>
+
+      {/* Bottom bar */}
+      {step === 2 && (
+        <div className="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-foreground/50 backdrop-blur-md px-6 py-4">
+          <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
+            <p className="text-xs text-neutral-500 max-w-sm">
+              By uploading, you confirm that your sounds comply with our Terms
+              of Use and you don't infringe anyone else's rights.
+            </p>
+            <Button
+              type="button"
+              disabled={isLoading}
+              onClick={form.handleSubmit(onSubmit)}
+              className="rounded-full text-xs bg-emerald-500 hover:bg-emerald-400 text-white disabled:opacity-50 py-5 px-16"
+            >
+              {isLoading ? "Uploading..." : "Upload"}
+            </Button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
