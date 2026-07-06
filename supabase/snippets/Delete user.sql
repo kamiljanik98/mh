@@ -1,1 +1,0 @@
-delete from auth.users where email = 'admin@mail.com';
