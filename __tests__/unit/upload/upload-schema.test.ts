@@ -111,6 +111,30 @@ describe("uploadSchema", () => {
     expect(result.success).toBe(true);
   });
 
+  it("rejects bpm with a decimal value", () => {
+    const file = new File(["valid audio content"], "audio.mp3", {
+      type: "audio/mpeg",
+    });
+    const result = uploadSchema.safeParse({
+      title: "test file",
+      audio: file,
+      bpm: "500.5",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a negative bpm", () => {
+    const file = new File(["valid audio content"], "audio.mp3", {
+      type: "audio/mpeg",
+    });
+    const result = uploadSchema.safeParse({
+      title: "test file",
+      audio: file,
+      bpm: "-5",
+    });
+    expect(result.success).toBe(false);
+  });
+
   it("accepts a valid cover image", () => {
     const audio = new File(["valid audio content"], "audio.mp3", {
       type: "audio/mpeg",
