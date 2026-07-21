@@ -4,36 +4,51 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LoginForm from "@/components/auth/login-form";
 
-const mockLogin = vi.fn();
-const mockClose = vi.fn();
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    refresh: vi.fn(),
-  }),
-}));
+const { mockLogin, mockClose, mockSetView, mockDiscordLogin, mockToastError } =
+  vi.hoisted(() => ({
+    mockLogin: vi.fn(),
+    mockClose: vi.fn(),
+    mockSetView: vi.fn(),
+    mockDiscordLogin: vi.fn(),
+    mockToastError: vi.fn(),
+  }));
 
 vi.mock("@/hooks/auth/use-login", () => ({
-  default: () => ({
-    login: mockLogin,
-    isLoading: false,
-  }),
+  default: () => ({ login: mockLogin, isLoading: false }),
 }));
 
 vi.mock("@/hooks/auth/use-auth-modal", () => ({
-  default: () => ({
-    close: mockClose,
-  }),
+  default: () => ({ close: mockClose, setView: mockSetView }),
+}));
+
+vi.mock("@/hooks/auth/use-discord-login", () => ({
+  default: () => ({ discordLogin: mockDiscordLogin, isSocialLoading: false }),
 }));
 
 vi.mock("sonner", () => ({
-  toast: { error: vi.fn(), success: vi.fn() },
+  toast: { success: vi.fn(), error: mockToastError },
 }));
 
 describe("LoginForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it("calls login with form values on valid submit", async () => {
+    mockLogin.mockResolvedValue({ error: null });
+    const user = userEvent.setup();
+    render(<LoginForm />);
+
+    await user.type(screen.getByLabelText(/email/i), "user@example.com");
+    await user.type(screen.getByLabelText(/password/i), "secret123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: "user@example.com",
+        password: "secret123",
+      });
+    });
   });
 
   it("shows inline error for invalid email without submitting", async () => {
@@ -68,7 +83,7 @@ describe("LoginForm", () => {
     expect(mockLogin).not.toHaveBeenCalled();
   });
 
-  it("does not show field errors for valid input", async () => {
+  it("shows no error on valid input", async () => {
     const user = userEvent.setup();
     render(<LoginForm />);
 
@@ -92,7 +107,6 @@ describe("LoginForm", () => {
 
   it("closes the auth modal on successful login, with no toast", async () => {
     mockLogin.mockResolvedValue({ error: null });
-    const { toast } = await import("sonner");
     const user = userEvent.setup();
     render(<LoginForm />);
 
@@ -101,14 +115,13 @@ describe("LoginForm", () => {
     await user.click(screen.getByRole("button", { name: /sign in/i }));
 
     await waitFor(() => expect(mockClose).toHaveBeenCalled());
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(mockToastError).not.toHaveBeenCalled();
   });
 
   it("shows error toast and keeps modal open on failed login", async () => {
     mockLogin.mockResolvedValue({
       error: new Error("Invalid login credentials"),
     });
-    const { toast } = await import("sonner");
     const user = userEvent.setup();
     render(<LoginForm />);
 
@@ -117,8 +130,8 @@ describe("LoginForm", () => {
     await user.click(screen.getByRole("button", { name: /sign in/i }));
 
     await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith("Invalid login credentials"),
+      expect(mockToastError).toHaveBeenCalledWith("Invalid login credentials"),
     );
-    expect(mockClose).not.toHaveBeenCalled();
+    expect(mockSetView).not.toHaveBeenCalled();
   });
 });

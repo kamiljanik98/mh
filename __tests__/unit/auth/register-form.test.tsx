@@ -4,6 +4,20 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RegisterForm from "@/components/auth/register-form";
 
+const {
+  mockRegister,
+  mockClose,
+  mockDiscordLogin,
+  mockToastSuccess,
+  mockToastError,
+} = vi.hoisted(() => ({
+  mockRegister: vi.fn(),
+  mockClose: vi.fn(),
+  mockDiscordLogin: vi.fn(),
+  mockToastSuccess: vi.fn(),
+  mockToastError: vi.fn(),
+}));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),
@@ -12,15 +26,19 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@/hooks/auth/use-register", () => ({
-  default: () => ({ register: vi.fn(), isLoading: false }),
+  default: () => ({ register: mockRegister, isLoading: false }),
 }));
 
 vi.mock("@/hooks/auth/use-auth-modal", () => ({
-  default: () => ({ close: vi.fn(), setView: vi.fn() }),
+  default: () => ({ close: mockClose, setView: vi.fn() }),
+}));
+
+vi.mock("@/hooks/auth/use-discord-login", () => ({
+  default: () => ({ discordLogin: mockDiscordLogin, isSocialLoading: false }),
 }));
 
 vi.mock("sonner", () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+  toast: { success: mockToastSuccess, error: mockToastError },
 }));
 
 describe("RegisterForm", () => {
@@ -83,5 +101,60 @@ describe("RegisterForm", () => {
         "false",
       );
     });
+  });
+
+  it("calls register with form values on valid submit", async () => {
+    mockRegister.mockResolvedValue({ error: null });
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    await user.type(screen.getByLabelText(/nickname/i), "jankowalski");
+    await user.type(screen.getByLabelText(/email/i), "jankowalski@example.com");
+    await user.type(screen.getByLabelText(/password/i), "Abcdef1");
+    await user.click(screen.getByRole("button", { name: /^register$/i }));
+
+    await waitFor(() => {
+      expect(mockRegister).toHaveBeenCalledWith({
+        nickname: "jankowalski",
+        email: "jankowalski@example.com",
+        password: "Abcdef1",
+      });
+    });
+  });
+
+  it("shows a success toast and closes the modal on success", async () => {
+    mockRegister.mockResolvedValue({ error: null });
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    await user.type(screen.getByLabelText(/nickname/i), "jankowalski");
+    await user.type(screen.getByLabelText(/email/i), "jan@example.com");
+    await user.type(screen.getByLabelText(/password/i), "Abcdef1");
+    await user.click(screen.getByRole("button", { name: /^register$/i }));
+
+    await waitFor(() => {
+      expect(mockToastSuccess).toHaveBeenCalledWith(
+        "Check your inbox - we sent you a confirmation link.",
+      );
+      expect(mockClose).toHaveBeenCalled();
+    });
+  });
+
+  it("shows an error toast and keeps the modal open on failure", async () => {
+    mockRegister.mockResolvedValue({
+      error: new Error("Nickname already taken."),
+    });
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    await user.type(screen.getByLabelText(/nickname/i), "jankowalski");
+    await user.type(screen.getByLabelText(/email/i), "jan@example.com");
+    await user.type(screen.getByLabelText(/password/i), "Abcdef1");
+    await user.click(screen.getByRole("button", { name: /^register$/i }));
+
+    await waitFor(() => {
+      expect(mockToastError).toHaveBeenCalledWith("Nickname already taken.");
+    });
+    expect(mockClose).not.toHaveBeenCalled();
   });
 });
