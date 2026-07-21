@@ -25,14 +25,15 @@ const useRegister = () => {
       return { error: new Error("Nickname already taken") };
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { nickname } },
+      options: {
+        data: { nickname },
+      },
     });
-
     setIsLoading(false);
-    return { error };
+    return { data, error };
   };
 
   return { register, isLoading };
