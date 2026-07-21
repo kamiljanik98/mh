@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues, registerSchema } from "@/lib/validations/auth";
-import FormInput from "@/components/common/form-input";
+import FormInput from "@/components/form/form-input";
 import SocialButton from "./social-button";
 import useDiscordLogin from "@/hooks/auth/use-discord-login";
 

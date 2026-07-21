@@ -9,7 +9,7 @@ import {
   updatePasswordSchema,
 } from "@/lib/validations/auth";
 import useUpdatePassword from "@/hooks/auth/use-update-password";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/components/form/form-input";
 import { Button } from "@/components/ui/button";
 
 const UpdatePasswordForm = () => {

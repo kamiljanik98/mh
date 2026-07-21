@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import FormInput from "@/components/common/form-input";
+import FormInput from "@/components/form/form-input";
 import FormInputFileAudio from "@/components/upload/form/form-input-file-audio";
 import FormInputFileImage from "@/components/upload/form/form-input-file-image";
 import useUpload from "@/hooks/upload/use-upload";
@@ -145,7 +145,6 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
             <FormInputFileAudio
               name="audio"
               control={form.control}
-              setValue={form.setValue}
               label="Audio file"
               accept={ACCEPTED_AUDIO}
               onFileDrop={onAudioDrop}
@@ -161,7 +160,6 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
                 <FormInputFileImage
                   name="cover"
                   control={form.control}
-                  setValue={form.setValue}
                   label="Cover image"
                   accept={ACCEPTED_IMAGE}
                   className="rounded-md"
@@ -209,7 +207,6 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
         )}
       </form>
 
-      {/* Bottom bar */}
       {step === 2 && (
         <div className="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-foreground/50 backdrop-blur-md px-6 py-4">
           <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
