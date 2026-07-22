@@ -1,7 +1,9 @@
+"use server";
+
 import { createClient } from "@/lib/supabase/server";
 import { deleteFromR2 } from "@/lib/r2/upload";
 
-export default async function deleteSong(id: string) {
+export const deleteSong = async (id: string) => {
   const supabase = await createClient();
 
   const {
@@ -70,4 +72,4 @@ export default async function deleteSong(id: string) {
     .eq("id", id);
 
   return { error: deleteSongError };
-}
+};
