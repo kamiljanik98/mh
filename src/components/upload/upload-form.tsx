@@ -1,20 +1,32 @@
 "use client";
 
 import { useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/form/form-input";
 import FormInputFileAudio from "@/components/upload/form/form-input-file-audio";
 import FormInputFileImage from "@/components/upload/form/form-input-file-image";
+import FormInputFileStem from "@/components/upload/form/form-input-file-stem";
 import useUpload from "@/hooks/upload/use-upload";
 import { uploadSchema, type UploadFormValues } from "@/lib/validations/upload";
 import { ACCEPTED_AUDIO, ACCEPTED_IMAGE } from "@/lib/constants";
 import { useRouter } from "next/navigation";
-import { XIcon } from "lucide-react";
+import { XIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
+const STEM_CATEGORIES = [
+  "vocals",
+  "drums",
+  "bass",
+  "melody",
+  "guitar",
+  "synth",
+  "fx",
+  "other",
+] as const;
 
 type UploadFormProps = {
   step: 1 | 2;
@@ -35,8 +47,14 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
       genre: "",
       tags: "",
       description: "",
+      stems: [],
     },
     mode: "onBlur",
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "stems",
   });
 
   function onAudioDrop(file: File) {
@@ -62,6 +80,14 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
       formData.append("description", values.description);
     formData.append("audio", values.audio);
     if (values.cover) formData.append("cover", values.cover);
+
+    if (values.stems?.length) {
+      for (const stem of values.stems) {
+        formData.append("stemFile", stem.file);
+        formData.append("stemCategory", stem.category);
+      }
+    }
+
     const { data, error } = await upload(formData);
     if (error) {
       toast.error(error.message);
@@ -203,6 +229,55 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
               label="Description"
               placeholder="Tracks with descriptions tend to get more plays and engagements."
             />
+
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Stems (optional)
+                </p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    append({ file: undefined as never, category: "other" })
+                  }
+                  className="flex items-center gap-1 text-xs text-neutral-400 hover:text-neutral-200 transition-colors"
+                >
+                  <PlusIcon size={14} />
+                  Add stem
+                </button>
+              </div>
+
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex items-center gap-3">
+                  <FormInputFileStem
+                    name={`stems.${index}.file`}
+                    control={form.control}
+                    label=""
+                    accept={ACCEPTED_AUDIO}
+                    className="flex-1"
+                  />
+
+                  <select
+                    {...form.register(`stems.${index}.category`)}
+                    className="rounded-md border border-border bg-muted px-2 py-2 text-xs text-foreground"
+                  >
+                    {STEM_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="shrink-0 text-neutral-400 hover:text-destructive transition-colors"
+                  >
+                    <TrashIcon size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </form>
