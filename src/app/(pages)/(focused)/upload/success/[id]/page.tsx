@@ -24,7 +24,7 @@ export default async function UploadSuccessPage({
 
   const songUrl = `${process.env.NEXT_PUBLIC_APP_URL}/songs/${song.id}`;
   const coverUrl = song.image_path
-    ? `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${song.image_path}`
+    ? `${process.env.NEXT_PUBLIC_R2_COVERS_URL}/${song.image_path}`
     : null;
 
   return (

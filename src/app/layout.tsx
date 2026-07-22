@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/common/navbar";
 import AuthModal from "@/components/auth/auth-modal";
 import Footer from "@/components/common/footer";
+import { Bar } from "@/components/player/bar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             },
           }}
         />
+        <Bar />
       </body>
     </html>
   );
