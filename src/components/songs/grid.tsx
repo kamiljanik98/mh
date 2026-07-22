@@ -7,7 +7,7 @@ import { useOnPlay } from "@/hooks/player/use-on-play";
 import { Card } from "@/components/songs/card";
 
 export const Grid = () => {
-  const { songs, isLoading } = useGetSongs();
+  const { songs, isLoading, error } = useGetSongs();
   const onPlay = useOnPlay(songs);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -39,6 +39,14 @@ export const Grid = () => {
     return (
       <div className="h-48 w-full bg-neutral-800 animate-pulse rounded-md" />
     );
+
+  if (error)
+    return (
+      <div className="h-48 w-full flex items-center justify-center text-sm text-neutral-500">
+        Failed to load songs.
+      </div>
+    );
+
   if (!songs.length) return null;
 
   return (
