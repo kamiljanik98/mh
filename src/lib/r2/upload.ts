@@ -3,6 +3,7 @@ import { r2 } from "./client";
 
 const BUCKETS = {
   songs: process.env.R2_BUCKET_SONGS!,
+  stems: process.env.R2_BUCKET_STEMS!,
   covers: process.env.R2_BUCKET_COVERS!,
 } as const;
 
@@ -29,7 +30,7 @@ export async function uploadSong(file: File, path: string): Promise<void> {
 }
 
 export async function uploadStem(file: File, path: string): Promise<void> {
-  return uploadToR2(file, "songs", path);
+  return uploadToR2(file, "stems", path);
 }
 
 export async function uploadCover(file: File, path: string): Promise<void> {

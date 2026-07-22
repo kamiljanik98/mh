@@ -1,17 +1,21 @@
 import "server-only";
 
-import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { Bucket$, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { r2, BUCKET_SONGS, R2_COVERS_URL } from "./client";
+import { r2, BUCKET_SONGS, BUCKET_STEMS } from "./client";
 
-export async function getPresignedUrl(path: string): Promise<string> {
+const PRIVATE_BUCKETS = {
+  songs: BUCKET_SONGS,
+  stems: BUCKET_STEMS,
+} as const;
+
+export async function getPresignedUrl(
+  path: string,
+  bucket: keyof typeof PRIVATE_BUCKETS = "songs",
+): Promise<string> {
   return getSignedUrl(
     r2,
-    new GetObjectCommand({ Bucket: BUCKET_SONGS, Key: path }),
+    new GetObjectCommand({ Bucket: PRIVATE_BUCKETS[bucket], Key: path }),
     { expiresIn: 3600 },
   );
-}
-
-export function getCoverUrl(path: string): string {
-  return `${R2_COVERS_URL}/${path}`;
 }
