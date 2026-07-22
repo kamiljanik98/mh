@@ -13,7 +13,7 @@ export function useGetSongs() {
     const fetchSongs = async () => {
       setIsLoading(true);
       const supabase = createClient();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("songs")
         .select("*, profiles!uploaded_by(nickname)")
         .order("created_at", { ascending: false });
