@@ -116,23 +116,23 @@ export type Database = {
       }
       stems: {
         Row: {
+          category: Database["public"]["Enums"]["stem_category"]
           created_at: string
           id: string
-          name: string
           path: string
           song_id: string
         }
         Insert: {
+          category: Database["public"]["Enums"]["stem_category"]
           created_at?: string
           id?: string
-          name: string
           path: string
           song_id: string
         }
         Update: {
+          category?: Database["public"]["Enums"]["stem_category"]
           created_at?: string
           id?: string
-          name?: string
           path?: string
           song_id?: string
         }
@@ -154,7 +154,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      stem_category:
+        | "vocals"
+        | "drums"
+        | "bass"
+        | "melody"
+        | "guitar"
+        | "synth"
+        | "fx"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -284,7 +292,18 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      stem_category: [
+        "vocals",
+        "drums",
+        "bass",
+        "melody",
+        "guitar",
+        "synth",
+        "fx",
+        "other",
+      ],
+    },
   },
 } as const
 
