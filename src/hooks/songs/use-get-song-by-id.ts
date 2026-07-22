@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { Song } from "@/types";
+import type { Song } from "@/types.ts";
 
 export function useGetSongById(id: string | null) {
   const [song, setSong] = useState<Song | null>(null);

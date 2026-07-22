@@ -1,36 +1,15 @@
-export type Stem = {
-  id: string;
-  song_id: string;
-  name: string;
-  path: string;
-  created_at: string;
-};
+import type { Tables } from "@/types/database.types";
 
-export type Song = {
-  id: string;
-  title: string;
-  uploaded_by: string;
-  path: string;
-  image_path: string;
-  bpm?: number;
-  scale?: string;
-  genre?: string;
-  tags: string[];
+export type Stem = Tables<"stems">;
+
+export type Song = Tables<"songs"> & {
   stems?: Stem[];
   profiles?: {
-    nickname?: string;
-  };
+    nickname: string | null;
+  } | null;
 };
 
-export type UserProfile = {
-  id: string;
-  nickname: string;
-  avatar_url?: string | null;
-  role: "guest" | "user" | "admin";
-  email: string;
-  created_at: string;
-  uploaded_at: string;
-};
+export type UserProfile = Tables<"profiles">;
 
 export type EmailPasswordCredentials = {
   email: string;

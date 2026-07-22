@@ -9,7 +9,7 @@ export async function resolveSongUrl(path: string) {
   const { data: song, error: dbError } = await supabase
     .from("songs")
     .select("id")
-    .eq("file_path", path)
+    .eq("path", path)
     .single();
 
   if (dbError || !song) {
