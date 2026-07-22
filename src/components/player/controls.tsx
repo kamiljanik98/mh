@@ -32,10 +32,14 @@ export function Controls() {
   useEffect(() => {
     if (!audioRef.current || !url) return;
     audioRef.current.src = url;
-    audioRef.current.volume = volume;
     audioRef.current.play().catch(() => {});
     audioRef.current.onended = handleNext;
-  }, [url, handleNext, volume]);
+  }, [url, handleNext]);
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.volume = volume;
+  }, [volume]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
