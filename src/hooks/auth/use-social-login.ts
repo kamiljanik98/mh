@@ -16,10 +16,13 @@ const useSocialLogin = () => {
         skipBrowserRedirect: true,
       },
     });
-
-    if (error || !data.url) {
+    if (error) {
       setIsLoading(false);
       return { error };
+    }
+    if (!data.url) {
+      setIsLoading(false);
+      return { error: new Error("No OAuth URL returned") };
     }
 
     localStorage.removeItem("discord-oauth-result");
