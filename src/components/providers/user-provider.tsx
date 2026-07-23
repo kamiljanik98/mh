@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import useUser from "@/hooks/account/use-user";
 import type { UserProfile } from "@/types";
 
-const useUser = () => {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const supabase = createClient();
+export const UserProvider = () => {
+  const setUser = useUser((state) => state.setUser);
+  const setIsLoading = useUser((state) => state.setIsLoading);
 
   useEffect(() => {
+    const supabase = createClient();
+
     const loadProfile = async (userId: string) => {
       const { data } = await supabase
         .from("profiles")
@@ -17,14 +20,16 @@ const useUser = () => {
         .single();
 
       setUser(data as UserProfile | null);
+      setIsLoading(false);
     };
 
     const init = async () => {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
-        loadProfile(data.user.id);
+        await loadProfile(data.user.id);
       } else {
         setUser(null);
+        setIsLoading(false);
       }
     };
 
@@ -36,14 +41,13 @@ const useUser = () => {
           loadProfile(session.user.id);
         } else {
           setUser(null);
+          setIsLoading(false);
         }
       },
     );
 
     return () => listener.subscription.unsubscribe();
-  }, []);
+  }, [setUser, setIsLoading]);
 
-  return { user };
+  return null;
 };
-
-export default useUser;
