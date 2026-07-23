@@ -3,16 +3,17 @@
 import useAuthModal from "@/hooks/auth/use-auth-modal";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import useUser from "@/hooks/auth/useUser";
+import useUser from "@/hooks/account/use-user";
 import useSignOut from "@/hooks/auth/use-sign-out";
 import { LogOut, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SearchInput } from "../search/search-input";
 
 export default function Navbar() {
+  const user = useUser((state) => state.user);
   const router = useRouter();
   const { open } = useAuthModal();
-  const { user } = useUser();
   const { signOut } = useSignOut();
 
   return (
@@ -33,16 +34,8 @@ export default function Navbar() {
         <Link href="/library">Library</Link>
       </div>
 
-      <div className="relative flex-1 min-w-0">
-        <input
-          type="text"
-          placeholder="Search for artist"
-          className="w-full bg-neutral-800 text-neutral-200 placeholder:text-neutral-500 text-sm px-4 py-2.5 pl-10 outline-none focus:bg-neutral-700 transition-colors"
-        />
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none"
-        />
+      <div className="flex-1 min-w-0">
+        <SearchInput />
       </div>
 
       {user ? (

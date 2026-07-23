@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/common/navbar";
 import AuthModal from "@/components/auth/auth-modal";
 import { Bar } from "@/components/player/bar";
+import { UserProvider } from "@/components/providers/user-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} antialiased`}>
       <body className="bg-foreground text-background">
         <Navbar />
+        <UserProvider />
         <Toaster
           position="top-center"
           toastOptions={{
@@ -43,6 +45,7 @@ export default function RootLayout({
           }}
         />
         <AuthModal />
+
         {children}
         <Bar />
       </body>
