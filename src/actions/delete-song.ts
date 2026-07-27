@@ -1,9 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { deleteFromR2 } from "@/lib/r2/upload";
 
-export const deleteSong = async (id: string) => {
+type DeleteSongResult = {
+  error: Error | null;
+};
+
+export const deleteSong = async (id: string): Promise<DeleteSongResult> => {
   const supabase = await createClient();
 
   const {
@@ -32,14 +37,16 @@ export const deleteSong = async (id: string) => {
 
   try {
     await deleteFromR2("songs", song.path);
-  } catch {
-    orphanedPaths.push(`covers/${song.image_path}`);
+  } catch (err) {
+    console.error(`Failed to delete songs/${song.path}:`, err);
+    orphanedPaths.push(`songs/${song.path}`);
   }
 
   if (song.image_path) {
     try {
       await deleteFromR2("covers", song.image_path);
-    } catch {
+    } catch (err) {
+      console.error(`Failed to delete covers/${song.image_path}:`, err);
       orphanedPaths.push(`covers/${song.image_path}`);
     }
   }
@@ -47,7 +54,8 @@ export const deleteSong = async (id: string) => {
   for (const stem of song.stems ?? []) {
     try {
       await deleteFromR2("stems", stem.path);
-    } catch {
+    } catch (err) {
+      console.error(`Failed to delete stems/${stem.path}:`, err);
       orphanedPaths.push(`stems/${stem.path}`);
     }
   }
@@ -63,7 +71,7 @@ export const deleteSong = async (id: string) => {
     .eq("song_id", id);
 
   if (deleteStemsError) {
-    return { error: deleteStemsError };
+    return { error: new Error(deleteStemsError.message) };
   }
 
   const { error: deleteSongError } = await supabase
@@ -71,5 +79,10 @@ export const deleteSong = async (id: string) => {
     .delete()
     .eq("id", id);
 
-  return { error: deleteSongError };
+  if (deleteSongError) {
+    return { error: new Error(deleteSongError.message) };
+  }
+
+  revalidatePath("/account/me");
+  return { error: null };
 };
