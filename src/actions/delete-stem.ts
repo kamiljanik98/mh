@@ -35,7 +35,8 @@ export const deleteStem = async (stemId: string): Promise<DeleteStemResult> => {
 
   try {
     await deleteFromR2("stems", stem.path);
-  } catch {
+  } catch (err) {
+    console.error(`Failed to delete stems/${stem.path}:`, err);
     return { error: new Error("Failed to delete stem file - aborted") };
   }
 
@@ -52,6 +53,6 @@ export const deleteStem = async (stemId: string): Promise<DeleteStemResult> => {
     };
   }
 
-  revalidatePath(`songs/${stem.song_id}`);
+  revalidatePath("/account/me");
   return { error: null };
 };
