@@ -1,10 +1,17 @@
 "use client";
 
 import { useRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import FormInput from "@/components/form/form-input";
 import FormInputFileAudio from "@/components/upload/form/form-input-file-audio";
 import FormInputFileImage from "@/components/upload/form/form-input-file-image";
@@ -16,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { XIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Field, FieldError } from "../ui/field";
 
 const STEM_CATEGORIES = [
   "vocals",
@@ -101,15 +109,14 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
 
   return (
     <>
-      {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-10 border-b border-white/10 bg-foreground/50 backdrop-blur-md px-6 py-4">
+      <div className="fixed top-0 left-0 right-0 z-20 border-b border-white/10 bg-background/50 backdrop-blur-md px-6 py-4">
         <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
           <span className="flex gap-2 items-center">
             <Image src="/logo.svg" alt="App logo" width={42} height={42} />
             {step === 1 ? (
-              <p className="font-semibold text-sm text-background">Upload</p>
+              <p className="font-semibold text-sm text-foreground">Upload</p>
             ) : (
-              <p className="font-semibold text-sm text-background">
+              <p className="font-semibold text-sm text-foreground">
                 Track Info
               </p>
             )}
@@ -257,16 +264,36 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
                     className="flex-1"
                   />
 
-                  <select
-                    {...form.register(`stems.${index}.category`)}
-                    className="rounded-md border border-border bg-muted px-2 py-2 text-xs text-foreground"
-                  >
-                    {STEM_CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
+                  <Controller
+                    name={`stems.${index}.category`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-32 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {STEM_CATEGORIES.map((cat) => (
+                              <SelectItem
+                                key={cat}
+                                value={cat}
+                                className="text-xs"
+                              >
+                                {cat}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
 
                   <button
                     type="button"
@@ -283,7 +310,7 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
       </form>
 
       {step === 2 && (
-        <div className="fixed bottom-0 left-0 right-0 border-t border-white/10 bg-foreground/50 backdrop-blur-md px-6 py-4">
+        <div className="fixed bottom-0 left-0 right-0 z-20 border-t border-white/10 bg-background/50 backdrop-blur-md px-6 py-4">
           <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
             <p className="text-xs text-neutral-500 max-w-sm">
               By uploading, you confirm that your sounds comply with our Terms
@@ -293,7 +320,7 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
               type="button"
               disabled={isLoading}
               onClick={form.handleSubmit(onSubmit)}
-              className="rounded-full text-xs bg-emerald-500 hover:bg-emerald-400 text-white disabled:opacity-50 py-5 px-16"
+              className="rounded-full text-xs bg-emerald-500 hover:bg-emerald-400 text-black disabled:opacity-50 py-5 px-16"
             >
               {isLoading ? "Uploading..." : "Upload"}
             </Button>
