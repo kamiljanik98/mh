@@ -10,7 +10,7 @@ export const getSongs = async (title?: string): Promise<GetSongsResult> => {
 
   let query = supabase
     .from("songs")
-    .select("*")
+    .select("*, profiles!uploaded_by(nickname, avatar_url)")
     .order("created_at", { ascending: false });
 
   if (title) {
