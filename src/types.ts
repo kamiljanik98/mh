@@ -4,9 +4,7 @@ export type Stem = Tables<"stems">;
 
 export type Song = Tables<"songs"> & {
   stems?: Stem[];
-  profiles?: {
-    nickname: string | null;
-  } | null;
+  profiles: Pick<Tables<"profiles">, "nickname" | "avatar_url"> | null;
 };
 
 export type UserProfile = Tables<"profiles">;
