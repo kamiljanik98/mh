@@ -5,6 +5,7 @@ const BUCKETS = {
   songs: process.env.R2_BUCKET_SONGS!,
   stems: process.env.R2_BUCKET_STEMS!,
   covers: process.env.R2_BUCKET_COVERS!,
+  avatars: process.env.R2_BUCKET_AVATARS!,
 } as const;
 
 type Bucket = keyof typeof BUCKETS;
@@ -35,6 +36,10 @@ export async function uploadStem(file: File, path: string): Promise<void> {
 
 export async function uploadCover(file: File, path: string): Promise<void> {
   return uploadToR2(file, "covers", path);
+}
+
+export async function uploadAvatar(file: File, path: string): Promise<void> {
+  return uploadToR2(file, "avatars", path);
 }
 
 export async function deleteFromR2(

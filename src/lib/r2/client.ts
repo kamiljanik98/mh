@@ -14,3 +14,4 @@ export const BUCKET_STEMS = process.env.R2_BUCKET_STEMS!;
 export const BUCKET_SONGS = process.env.R2_BUCKET_SONGS!;
 export const BUCKET_COVERS = process.env.R2_BUCKET_COVERS!;
 export const R2_COVERS_URL = process.env.NEXT_PUBLIC_R2_COVERS_URL!;
+export const R2_AVATARS_URL = process.env.NEXT_PUBLIC_R2_AVATARS_URL!;
