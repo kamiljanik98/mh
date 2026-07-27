@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { Song } from "@/types.ts";
+import type { Song } from "@/types";
 
 export function useGetSongById(id: string | null) {
   const [song, setSong] = useState<Song | null>(null);
@@ -20,7 +20,7 @@ export function useGetSongById(id: string | null) {
       const supabase = createClient();
       const { data, error } = await supabase
         .from("songs")
-        .select("*")
+        .select("*, profiles!uploaded_by(nickname)")
         .eq("id", id)
         .single();
 
