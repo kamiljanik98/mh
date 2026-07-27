@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`}>
-      <body className="bg-foreground text-background">
+      <body className="mx-auto max-w-6xl bg-background text-foreground">
         <Navbar />
         <UserProvider />
         <Toaster
