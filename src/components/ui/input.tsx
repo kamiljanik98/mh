@@ -1,22 +1,33 @@
 import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+const inputVariants = cva(
+  "w-full min-w-0 text-xs outline-none transition-colors duration-200 placeholder:text-muted-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        underline:
+          "bg-transparent px-0 py-2 border-0 border-b border-neutral-600 focus:border-neutral-700",
+        filled:
+          "rounded-md bg-neutral-900 px-3 py-2 border border-transparent focus:border-neutral-700",
+      },
+    },
+    defaultVariants: {
+      variant: "underline",
+    },
+  },
+);
+
+type InputProps = React.ComponentProps<"input"> &
+  VariantProps<typeof inputVariants>;
+
+function Input({ className, type, variant, ...props }: InputProps) {
   return (
     <input
       type={type}
       data-slot="input"
-      className={cn(
-        "w-full min-w-0 bg-transparent px-0 py-2 text-xs outline-none",
-        "border-0 border-b border-neutral-600",
-        "transition-colors duration-200",
-        "focus:border-neutral-100",
-        "placeholder:text-muted-foreground",
-        "file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
-        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        "aria-invalid:border-destructive",
-        className,
-      )}
+      className={cn(inputVariants({ variant }), className)}
       {...props}
     />
   );
