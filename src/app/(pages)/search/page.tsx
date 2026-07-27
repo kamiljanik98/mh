@@ -1,5 +1,5 @@
 import { getSongs } from "@/actions/get-songs";
-import { SearchContent } from "@/components/search/content";
+import { Content } from "@/components/search/content";
 
 type SearchPageProps = {
   searchParams: Promise<{ title?: string }>;
@@ -17,5 +17,5 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     );
   }
 
-  return <SearchContent songs={songs} title={title} />;
+  return <Content songs={songs} title={title} />;
 }

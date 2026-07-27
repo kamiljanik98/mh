@@ -1,16 +1,15 @@
-// components/search/search-content.tsx
 "use client";
 
 import { useOnPlay } from "@/hooks/player/use-on-play";
 import { Song } from "@/types";
 import { Row } from "../songs/row";
 
-type SearchContentProps = {
+type ContentProps = {
   songs: Song[];
   title?: string;
 };
 
-export const SearchContent = ({ songs, title }: SearchContentProps) => {
+export const Content = ({ songs, title }: ContentProps) => {
   const onPlay = useOnPlay(songs);
 
   return (
