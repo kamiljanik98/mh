@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { Song } from "@/types";
-import { profile } from "console";
 
 export async function getUserSongs(userId: string): Promise<Song[]> {
   const supabase = await createClient();
