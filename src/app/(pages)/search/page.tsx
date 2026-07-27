@@ -1,5 +1,5 @@
 import { getSongs } from "@/actions/get-songs";
-import { SearchContent } from "@/components/search/search-content";
+import { SearchContent } from "@/components/search/content";
 
 type SearchPageProps = {
   searchParams: Promise<{ title?: string }>;
