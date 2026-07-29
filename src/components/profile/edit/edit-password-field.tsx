@@ -48,7 +48,7 @@ export function EditPasswordField() {
       <div className="flex items-center justify-between pb-3">
         <div>
           <p className="text-sm text-muted-foreground">Password</p>
-          <p className="text-sm text-white">••••••••</p>
+          <p className="text-sm text-foreground">••••••••</p>
         </div>
         <Button variant="ghost" size="sm" onClick={startEdit}>
           Edit

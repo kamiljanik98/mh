@@ -20,7 +20,7 @@ export const UserProfileButton = () => {
   if (!user) return null;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="flex items-center gap-1.5 text-sm text-neutral-300 hover:text-neutral-100 transition-colors cursor-pointer outline-none">
         <div className="size-8 rounded-full overflow-hidden shrink-0">
           <Image
@@ -34,9 +34,11 @@ export const UserProfileButton = () => {
         <span>{user.nickname ?? "No nickname"}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-40">
-        {" "}
         <DropdownMenuItem asChild>
-          <Link href="/account/me" className="flex items-center gap-2">
+          <Link
+            href={`/profile/${user.nickname}`}
+            className="flex items-center gap-2"
+          >
             <Settings size={14} />
             Account settings
           </Link>
