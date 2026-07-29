@@ -32,21 +32,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} antialiased`}>
-      <body className="mx-auto max-w-6xl bg-background text-foreground">
+      <body className="bg-background text-foreground">
         <Navbar />
-        <UserProvider />
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            classNames: {
-              success: "!bg-neutral-950 !border-green-800 !text-green-300",
-              error: "!bg-red-950 !border-red-800 !text-red-300",
-            },
-          }}
-        />
-        <AuthModal />
-
-        {children}
+        <div className="mx-auto max-w-6xl">
+          <UserProvider />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              classNames: {
+                success: "!bg-neutral-950 !border-green-800 !text-green-300",
+                error: "!bg-red-950 !border-red-800 !text-red-300",
+              },
+            }}
+          />
+          <AuthModal />
+          {children}
+        </div>
         <Bar />
       </body>
     </html>

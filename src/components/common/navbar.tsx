@@ -1,70 +1,64 @@
 "use client";
 
-import useAuthModal from "@/hooks/auth/use-auth-modal";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import useUser from "@/hooks/account/use-user";
-import useSignOut from "@/hooks/auth/use-sign-out";
-import { LogOut, Search, User } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { CloudUpload } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import useAuthModal from "@/hooks/auth/use-auth-modal";
+import useUser from "@/hooks/account/use-user";
 import { SearchInput } from "../search/search-input";
+import { UserProfileButton } from "../profile/user-button";
 
 export default function Navbar() {
   const user = useUser((state) => state.user);
   const router = useRouter();
   const { open } = useAuthModal();
-  const { signOut } = useSignOut();
 
   return (
-    <nav className="bg-foreground flex items-center gap-6 px-6 py-4 max-w-6xl mx-auto">
-      <div
-        onClick={() => router.push("/")}
-        className="cursor-pointer flex gap-2.5 items-center shrink-0"
-      >
-        <Image src="/logo.svg" alt="App logo" width={50} height={50} />
-        <p className="text-sm font-semibold tracking-wider uppercase text-neutral-300">
-          MusicHub
-        </p>
-      </div>
+    <nav className="bg-card">
+      <div className="mx-auto flex max-w-6xl items-center gap-6 px-6 py-4">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5">
+          <Image src="/logo.svg" alt="App logo" width={50} height={50} />
+          <p className="text-sm font-semibold uppercase tracking-wider text-neutral-300">
+            MusicHub
+          </p>
+        </Link>
 
-      <div className="flex gap-4 text-[13px] font-bold text-muted-foreground shrink-0">
-        <Link href="/discover">Discover</Link>
-        <Link href="/feed">Feed</Link>
-        <Link href="/library">Library</Link>
-      </div>
+        <div className="flex shrink-0 gap-4 text-[13px] font-bold text-muted-foreground">
+          <Link href="/feed">Feed</Link>
+          <Link href="/library">Library</Link>
+        </div>
 
-      <div className="flex-1 min-w-0">
-        <SearchInput />
-      </div>
+        <div className="min-w-0 flex-1">
+          <SearchInput />
+        </div>
 
-      {user ? (
-        <div className="flex gap-3 items-center shrink-0">
-          <Button variant="ghost" asChild>
-            <Link href="/upload" className="text-green-500">
+        {user ? (
+          <div className="flex shrink-0 items-center gap-4">
+            <Button
+              variant="ghost"
+              className="p-3 gap-2 text-muted-foreground active:scale-95"
+              onClick={() => router.push("/upload")}
+            >
+              <CloudUpload className="size-5" />
               Upload
-            </Link>
-          </Button>
-          <div className="flex items-center gap-1.5 text-sm text-neutral-300 hover:text-neutral-100 transition-colors cursor-pointer">
-            <User size={16} />
-            <span>{user.nickname ?? "No nickname"}</span>
+            </Button>
+            <UserProfileButton />
           </div>
-          <Button size="icon" onClick={() => signOut()}>
-            <LogOut size={16} />
-          </Button>
-        </div>
-      ) : (
-        <div className="flex gap-4 shrink-0">
-          <Button onClick={() => open("login")}>Sign in</Button>
-          <Button
-            variant="secondary"
-            className="font-semibold"
-            onClick={() => open("register")}
-          >
-            Create account
-          </Button>
-        </div>
-      )}
+        ) : (
+          <div className="flex shrink-0 gap-4">
+            <Button onClick={() => open("login")}>Sign in</Button>
+            <Button
+              variant="secondary"
+              className="font-semibold"
+              onClick={() => open("register")}
+            >
+              Create account
+            </Button>
+          </div>
+        )}
+      </div>
     </nav>
   );
 }
