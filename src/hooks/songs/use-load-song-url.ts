@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { resolveSongUrl } from "@/actions/resolve-song-url";
+import { resolveSongUrl } from "@/actions/songs/resolve-song-url";
 
 export function useLoadSongUrl(path: string | null) {
   const [url, setUrl] = useState<string | null>(null);

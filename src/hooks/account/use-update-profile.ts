@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import useUser from "@/hooks/account/use-user";
-import { updateProfile } from "@/actions/update-profile";
+import { updateProfile } from "@/actions/profile/update-profile";
 
 type UpdateProfileInput = {
   nickname: string;

@@ -1,4 +1,4 @@
-import { getSongs } from "@/actions/get-songs";
+import { getSongs } from "@/actions/songs/get-songs";
 import { Content } from "@/components/search/content";
 
 type SearchPageProps = {
