@@ -4,6 +4,7 @@ export type Stem = Tables<"stems">;
 
 export type Song = Tables<"songs"> & {
   stems?: Stem[];
+  isLiked?: boolean;
   profiles: Pick<Tables<"profiles">, "nickname" | "avatar_url"> | null;
 };
 
