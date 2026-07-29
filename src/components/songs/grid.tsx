@@ -50,7 +50,7 @@ export const Grid = () => {
       >
         {songs.map((song) => (
           <div key={song.id} className="w-40 shrink-0">
-            <Card song={song} onPlay={onPlay} />
+            <Card isLikedInitially={song.isLiked} song={song} onPlay={onPlay} />
           </div>
         ))}
       </div>

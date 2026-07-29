@@ -2,7 +2,7 @@
 
 import { useOnPlay } from "@/hooks/player/use-on-play";
 import { Song } from "@/types";
-import { Row } from "../songs/row";
+import { Card } from "@/components/songs/card";
 
 type ContentProps = {
   songs: Song[];
@@ -22,7 +22,7 @@ export const Content = ({ songs, title }: ContentProps) => {
       ) : (
         <div className="flex flex-col">
           {songs.map((song) => (
-            <Row key={song.id} song={song} onPlay={onPlay} />
+            <Card key={song.id} song={song} onPlay={onPlay} variant="row" />
           ))}
         </div>
       )}
