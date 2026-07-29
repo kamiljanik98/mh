@@ -43,9 +43,10 @@ next-env.d.ts
 src/app/test
 
 /docs/
-/INBOX.md
 /README.md
 /TODO.md
+/MILESTONES.md
+/CLAUDE.md
 /TODO-EXPLAINED.md
 /CHANGELOG.md
 /CONVENTIONS.md
@@ -53,9 +54,6 @@ src/app/test
 /PROGRESS-LOG.md
 /DESIGN.md
 /PROBLEMS.md
-/CAVEMAN.md
-/NEW PLAN.md
-/TODO-2.md
 /seed/
 
 /supabase/.branches
