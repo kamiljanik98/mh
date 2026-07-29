@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Navbar from "@/components/common/navbar";
-import AuthModal from "@/components/auth/auth-modal";
+import AuthModal from "@/components/auth/auth-dialog";
 import { Bar } from "@/components/player/bar";
 import { UserProvider } from "@/components/providers/user-provider";
 

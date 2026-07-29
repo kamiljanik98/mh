@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import AuthModal from "@/components/auth/auth-modal";
+import AuthModal from "@/components/auth/auth-dialog";
 
 const mockClose = vi.fn();
 const mockSetView = vi.fn();
