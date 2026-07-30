@@ -17,7 +17,7 @@ vi.mock("@/hooks/auth/use-login", () => ({
   default: () => ({ login: mockLogin, isLoading: false }),
 }));
 
-vi.mock("@/hooks/auth/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-dialog", () => ({
   default: () => ({ close: mockClose, setView: mockSetView }),
 }));
 
@@ -105,7 +105,7 @@ describe("LoginForm", () => {
     expect(mockLogin).not.toHaveBeenCalled();
   });
 
-  it("closes the auth modal on successful login, with no toast", async () => {
+  it("closes the auth dialog on successful login, with no toast", async () => {
     mockLogin.mockResolvedValue({ error: null });
     const user = userEvent.setup();
     render(<LoginForm />);
@@ -118,7 +118,7 @@ describe("LoginForm", () => {
     expect(mockToastError).not.toHaveBeenCalled();
   });
 
-  it("shows error toast and keeps modal open on failed login", async () => {
+  it("shows error toast and keeps dialog open on failed login", async () => {
     mockLogin.mockResolvedValue({
       error: new Error("Invalid login credentials"),
     });

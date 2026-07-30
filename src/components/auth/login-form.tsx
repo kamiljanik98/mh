@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import useLogin from "@/hooks/auth/use-login";
-import useAuthModal from "@/hooks/auth/use-auth-modal";
+import useAuthModal from "@/hooks/auth/use-auth-dialog";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

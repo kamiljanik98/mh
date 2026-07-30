@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CloudUpload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import useAuthModal from "@/hooks/auth/use-auth-modal";
+import useAuthModal from "@/hooks/auth/use-auth-dialog";
 import useUser from "@/hooks/profile/use-user";
 import { SearchInput } from "../search/search-input";
 import { UserProfileButton } from "../profile/user-button";

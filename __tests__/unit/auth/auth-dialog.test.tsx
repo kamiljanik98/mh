@@ -10,7 +10,7 @@ const mockSetView = vi.fn();
 let mockIsOpen = true;
 let mockView: "login" | "register" = "login";
 
-vi.mock("@/hooks/auth/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-dialog", () => ({
   default: () => ({
     isOpen: mockIsOpen,
     view: mockView,

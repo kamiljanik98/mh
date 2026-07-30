@@ -16,7 +16,7 @@ vi.mock("@/hooks/auth/use-social-login", () => ({
   }),
 }));
 
-vi.mock("@/hooks/auth/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-dialog", () => ({
   default: () => ({
     close: mockClose,
   }),

@@ -29,7 +29,7 @@ vi.mock("@/hooks/auth/use-register", () => ({
   default: () => ({ register: mockRegister, isLoading: false }),
 }));
 
-vi.mock("@/hooks/auth/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-dialog", () => ({
   default: () => ({ close: mockClose, setView: vi.fn() }),
 }));
 
@@ -122,7 +122,7 @@ describe("RegisterForm", () => {
     });
   });
 
-  it("shows a success toast and closes the modal on success", async () => {
+  it("shows a success toast and closes the dialog on success", async () => {
     mockRegister.mockResolvedValue({ error: null });
     const user = userEvent.setup();
     render(<RegisterForm />);
@@ -140,7 +140,7 @@ describe("RegisterForm", () => {
     });
   });
 
-  it("shows an error toast and keeps the modal open on failure", async () => {
+  it("shows an error toast and keeps the dialog open on failure", async () => {
     mockRegister.mockResolvedValue({
       error: new Error("Nickname already taken."),
     });

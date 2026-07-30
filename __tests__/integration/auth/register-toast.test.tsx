@@ -22,7 +22,7 @@ vi.mock("@/hooks/auth/use-register", () => ({
 }));
 
 const closeMock = vi.fn();
-vi.mock("@/hooks/auth/use-auth-modal", () => ({
+vi.mock("@/hooks/auth/use-auth-dialog", () => ({
   default: () => ({ close: closeMock }),
 }));
 
@@ -31,7 +31,7 @@ describe("register form submit toast", () => {
     vi.clearAllMocks();
   });
 
-  it("fires the 'check your inbox' toast and closes the modal on submit success", async () => {
+  it("fires the 'check your inbox' toast and closes the dialog on submit success", async () => {
     registerMock.mockResolvedValue({ error: null });
     const user = userEvent.setup();
     render(<RegisterForm />);
@@ -49,7 +49,7 @@ describe("register form submit toast", () => {
     });
   });
 
-  it("shows a server-error toast and does not close the modal on register failure", async () => {
+  it("shows a server-error toast and does not close the dialog on register failure", async () => {
     registerMock.mockResolvedValue({
       error: new Error("Nickname already taken"),
     });

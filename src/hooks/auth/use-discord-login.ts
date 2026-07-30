@@ -1,7 +1,7 @@
 import { toast } from "sonner";
 import useSocialLogin from "./use-social-login";
 import { useRouter } from "next/navigation";
-import useAuthModal from "./use-auth-modal";
+import useAuthModal from "./use-auth-dialog";
 import { createClient } from "@/lib/supabase/client";
 
 const useDiscordLogin = () => {

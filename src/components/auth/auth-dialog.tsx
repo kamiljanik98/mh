@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useAuthModal from "@/hooks/auth/use-auth-modal";
+import useAuthDialog from "@/hooks/auth/use-auth-dialog";
 import RegisterForm from "./register-form";
 import LoginForm from "./login-form";
 import ForgotPasswordForm from "./forgot-password-form";
@@ -17,8 +17,8 @@ const titles = {
   "forgot-password": "Reset your password",
 };
 
-export default function AuthModal() {
-  const { isOpen, view, close, setView } = useAuthModal();
+export default function AuthDialog() {
+  const { isOpen, view, close, setView } = useAuthDialog();
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
