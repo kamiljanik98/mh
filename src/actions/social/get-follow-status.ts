@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-export const getIsFollowing = async (targetUserId: string) => {
+export const getFollowStatus = async (targetUserId: string) => {
   const supabase = await createClient();
   const {
     data: { user },

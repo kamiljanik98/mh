@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getSuggestedUsers } from "@/actions/social/get-suggested-users";
 import { getAvatarUrl } from "@/lib/r2/public";
 import { FollowButton } from "@/components/social/follow-button";
-import { getIsFollowing } from "@/actions/social/get-is-following";
+import { getFollowStatus } from "@/actions/social/get-follow-status";
 
 export async function SuggestedUsers({
   excludeUserId,
@@ -32,7 +32,7 @@ async function SuggestedUserCard({
 }: {
   user: { id: string; nickname: string | null; avatar_url: string | null };
 }) {
-  const { isFollowing } = await getIsFollowing(user.id);
+  const { isFollowing } = await getFollowStatus(user.id);
 
   return (
     <div className="flex items-center gap-3 rounded-md p-2">

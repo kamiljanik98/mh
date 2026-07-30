@@ -9,7 +9,7 @@ import { ShareButton } from "@/components/social/share-button";
 import { FollowButton } from "@/components/social/follow-button";
 import { SuggestedUsers } from "@/components/social/suggested-users";
 import { getProfileByNickname } from "@/actions/profile/get-profile-by-nickname";
-import { getIsFollowing } from "@/actions/social/get-is-following";
+import { getFollowStatus } from "@/actions/social/get-follow-status";
 import { getLikedSongs } from "@/actions/songs/get-liked-songs";
 import { LikedSongsList } from "@/components/profile/liked-songs-list";
 
@@ -34,7 +34,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     getLikedSongs(profile.id),
     isOwnProfile
       ? Promise.resolve({ isFollowing: false })
-      : getIsFollowing(profile.id),
+      : getFollowStatus(profile.id),
   ]);
 
   return (
