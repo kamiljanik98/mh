@@ -1,4 +1,3 @@
-// components/songs/waveform.tsx
 "use client";
 
 import { Play, Pause } from "lucide-react";
