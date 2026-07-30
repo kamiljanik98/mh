@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import useUser from "@/hooks/account/use-user";
+import useUser from "@/hooks/profile/use-user";
 import { updateProfile } from "@/actions/profile/update-profile";
 
 type UpdateProfileInput = {

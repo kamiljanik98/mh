@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
-import useUser from "../account/use-user";
+import useUser from "./use-user";
 
 const useChangePassword = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

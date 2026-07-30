@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
-import useUser from "@/hooks/account/use-user";
+import useUser from "@/hooks/profile/use-user";
 import type { UserProfile } from "@/types";
 
 export const UserProvider = () => {

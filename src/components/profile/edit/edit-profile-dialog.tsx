@@ -17,12 +17,12 @@ import FormInput from "@/components/form/form-input";
 import FormTextarea from "@/components/form/form-textarea";
 import FormInputAvatar from "@/components/profile/edit/form-input-avatar";
 import { EditPasswordField } from "@/components/profile/edit/edit-password-field";
-import useUpdateProfile from "@/hooks/account/use-update-profile";
+import useUpdateProfile from "@/hooks/profile/use-update-profile";
 import {
   profileSchema,
   type ProfileFormValues,
-} from "@/lib/validations/account";
-import useUser from "@/hooks/account/use-user";
+} from "@/lib/validations/profile";
+import useUser from "@/hooks/profile/use-user";
 
 export function EditProfileDialog() {
   const [open, setOpen] = useState(false);

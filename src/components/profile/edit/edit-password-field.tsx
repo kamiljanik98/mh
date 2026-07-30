@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CheckIcon, XIcon } from "lucide-react";
-import useChangePassword from "@/hooks/account/use-change-password";
+import useChangePassword from "@/hooks/profile/use-change-password";
 
 export function EditPasswordField() {
   const [isEditing, setIsEditing] = useState(false);

@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useUser from "@/hooks/account/use-user";
+import useUser from "@/hooks/profile/use-user";
 import useSignOut from "@/hooks/auth/use-sign-out";
 import { getAvatarUrl } from "@/lib/r2/public";
 
