@@ -1,4 +1,3 @@
-// components/profile/share-button.tsx
 "use client";
 
 import { Share2 } from "lucide-react";
@@ -7,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type ShareButtonProps = {
-  path: string; // e.g. "/profile/jukka" or "/song/abc123"
+  path: string;
   iconOnly?: boolean;
   className?: string;
 };

@@ -1,4 +1,3 @@
-// components/social/suggested-users.tsx
 import Image from "next/image";
 import Link from "next/link";
 import { getSuggestedUsers } from "@/actions/social/get-suggested-users";

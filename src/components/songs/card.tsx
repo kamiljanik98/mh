@@ -146,7 +146,6 @@ export const Card = ({
     );
   }
 
-  // variant === "grid" (default)
   return (
     <div className="group/card flex flex-col gap-2 rounded-md transition">
       <Link
