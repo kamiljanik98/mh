@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCoverUrl, getAvatarUrl } from "@/lib/r2/public";
-import { formatSongMeta } from "@/lib/format-song-meta";
+import { formatSongMeta } from "@/lib/format/song-meta";
 import { LikeButton } from "@/components/social/like-button";
 import { getSongById } from "@/actions/songs/get-song-by-id";
 import { ShareButton } from "@/components/social/share-button";

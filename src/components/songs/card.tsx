@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, Pause } from "lucide-react";
 import { getAvatarUrl, getCoverUrl } from "@/lib/r2/public";
-import { formatSongMeta } from "@/lib/format-song-meta";
+import { formatSongMeta } from "@/lib/format/song-meta";
+import { formatRelativeTime } from "@/lib/format/relative-time";
 import { useWaveform } from "@/hooks/songs/use-waveform";
 import { TitleLink } from "@/components/songs/title-link";
+import { cn } from "@/lib/utils";
 import { Actions } from "./actions";
 import { Song } from "@/types";
 
@@ -19,6 +21,7 @@ export type SongCardProps = {
   variant?: "grid" | "row" | "waveform";
   isLikedInitially?: boolean;
   onLikeToggle?: (isLiked: boolean) => void;
+  postedAt?: string;
 };
 
 export const Card = ({
@@ -27,6 +30,7 @@ export const Card = ({
   variant = "grid",
   isLikedInitially = false,
   onLikeToggle,
+  postedAt,
 }: SongCardProps) => {
   const meta = formatSongMeta(song);
 
@@ -92,7 +96,12 @@ export const Card = ({
 
   if (variant === "row") {
     return (
-      <div className="group/row flex items-center gap-3 rounded-md p-2 transition hover:bg-neutral-800">
+      <div
+        className={cn(
+          "group/row flex items-center gap-3 rounded-md p-2 transition hover:bg-neutral-800",
+          isActive && "bg-neutral-800",
+        )}
+      >
         <div className="relative shrink-0">
           <Image
             src={getCoverUrl(song.image_path)}
@@ -104,9 +113,13 @@ export const Card = ({
           <button
             onClick={() => onPlay(song.id)}
             className="absolute inset-0 flex items-center justify-center rounded-sm bg-black/50 opacity-0 transition-opacity group-hover/row:opacity-100"
-            aria-label={`Play ${song.title}`}
+            aria-label={isActive && isPlaying ? "Pause" : `Play ${song.title}`}
           >
-            <Play className="size-6 text-foreground" fill="currentColor" />
+            {isActive && isPlaying ? (
+              <Pause className="size-6 text-foreground" fill="currentColor" />
+            ) : (
+              <Play className="size-6 text-foreground" fill="currentColor" />
+            )}
           </button>
         </div>
 
@@ -129,6 +142,12 @@ export const Card = ({
             </p>
           </div>
         </div>
+
+        {postedAt && (
+          <p className="hidden shrink-0 text-xs text-muted-foreground sm:block">
+            {formatRelativeTime(postedAt)}
+          </p>
+        )}
 
         {meta && (
           <p className="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
