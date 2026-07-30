@@ -11,7 +11,7 @@ import { SuggestedUsers } from "@/components/social/suggested-users";
 import { getProfileByNickname } from "@/actions/profile/get-profile-by-nickname";
 import { getFollowStatus } from "@/actions/social/get-follow-status";
 import { getLikedSongs } from "@/actions/songs/get-liked-songs";
-import { LikedSongsList } from "@/components/profile/liked-songs-list";
+import { SongList } from "@/components/songs/song-list";
 
 type ProfilePageProps = {
   params: Promise<{ nickname: string }>;
@@ -89,7 +89,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <h2 className="mb-4 text-lg font-semibold text-neutral-100">
                 Likes
               </h2>
-              <LikedSongsList songs={likedSongs.data} />
+              <SongList songs={likedSongs.data} removeOnUnlike />
             </div>
           )}
         </aside>
