@@ -20,7 +20,7 @@ export function Actions({
         isLikedInitially={isLikedInitially}
         onToggle={onLikeToggle}
       />
-      <ShareButton path={`/song/${songId}`} iconOnly />
+      <ShareButton path={`/songs/${songId}`} iconOnly />
     </div>
   );
 }

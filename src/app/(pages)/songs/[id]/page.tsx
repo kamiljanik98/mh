@@ -53,7 +53,7 @@ export default async function SongPage({ params }: SongPageProps) {
           </div>
           <div className="flex items-center gap-3">
             <LikeButton songId={song.id} />
-            <ShareButton path={`/song/${song.id}`} />
+            <ShareButton path={`/songs/${song.id}`} />
           </div>
         </div>
       </div>
