@@ -42,6 +42,11 @@ next-env.d.ts
 
 src/app/test
 
+# claude
+.claude
+
+# markdown files
+
 /docs/
 /README.md
 /TODO.md
@@ -55,6 +60,7 @@ src/app/test
 /DESIGN.md
 /PROBLEMS.md
 /seed/
+/READ-FIRST(Q&A).md
 
 /supabase/.branches
 /supabase/.temp
