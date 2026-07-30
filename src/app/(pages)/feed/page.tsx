@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
 import { getFollowedArtistsSongs } from "@/actions/songs/get-followed-artists-songs";
 import { SuggestedUsers } from "@/components/social/suggested-users";
 import { createClient } from "@/lib/supabase/server";
-import { FeedSongList } from "@/components/feed/song-list";
+import { SongList } from "@/components/songs/song-list";
+import { AuthGate } from "@/components/auth/auth-gate";
 
 export default async function FeedPage() {
   const supabase = await createClient();
@@ -10,7 +10,9 @@ export default async function FeedPage() {
     data: { user: currentUser },
   } = await supabase.auth.getUser();
 
-  if (!currentUser) redirect("/");
+  if (!currentUser) {
+    return <AuthGate message="Sign in to see songs from artists you follow." />;
+  }
 
   const { data: songs, error } = await getFollowedArtistsSongs();
 
@@ -32,7 +34,7 @@ export default async function FeedPage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <FeedSongList songs={songs} />
+      <SongList songs={songs} />
     </div>
   );
 }
