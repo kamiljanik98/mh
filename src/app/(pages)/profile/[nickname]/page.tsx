@@ -1,4 +1,4 @@
-import { getUserSongs } from "@/actions/profile/get-user-songs";
+import { getUserSongs } from "@/actions/songs/get-user-songs";
 import { TrackList } from "@/components/profile/track-list";
 import { EditProfileDialog } from "@/components/profile/edit/edit-profile-dialog";
 import { getAvatarUrl } from "@/lib/r2/public";
