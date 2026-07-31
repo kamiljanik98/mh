@@ -15,7 +15,7 @@ export function useGetSongs() {
       const supabase = createClient();
       const { data, error } = await supabase
         .from("songs")
-        .select("*, profiles!uploaded_by(nickname)")
+        .select("*, profiles!uploaded_by(nickname, avatar_url)")
         .order("created_at", { ascending: false });
 
       setSongs(data ?? []);

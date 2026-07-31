@@ -15,14 +15,18 @@ export function useGetSongById(id: string | null) {
       return;
     }
 
+    let cancelled = false;
+
     const fetchSong = async () => {
       setIsLoading(true);
       const supabase = createClient();
       const { data, error } = await supabase
         .from("songs")
-        .select("*, profiles!uploaded_by(nickname)")
+        .select("*, profiles!uploaded_by(nickname, avatar_url)")
         .eq("id", id)
         .single();
+
+      if (cancelled) return;
 
       setSong(data);
       setError(error);
@@ -30,6 +34,10 @@ export function useGetSongById(id: string | null) {
     };
 
     fetchSong();
+
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   return { song, isLoading, error };

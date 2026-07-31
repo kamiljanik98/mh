@@ -14,21 +14,29 @@ export function useLoadSongUrl(path: string | null) {
       return;
     }
 
+    let cancelled = false;
+
     const load = async () => {
       setIsLoading(true);
       try {
         const { url, error } = await resolveSongUrl(path);
+        if (cancelled) return;
         setUrl(url);
         setError(error);
       } catch (error) {
+        if (cancelled) return;
         setUrl(null);
         setError(error as Error);
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     };
 
     load();
+
+    return () => {
+      cancelled = true;
+    };
   }, [path]);
 
   return { url, isLoading, error };
