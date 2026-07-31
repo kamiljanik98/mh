@@ -31,7 +31,7 @@ describe("RLS - unauthenticated insert is blocked", () => {
   it("cannot insert into stems", async () => {
     const { error } = await supabase.from("stems").insert({
       song_id: crypto.randomUUID(),
-      name: "test",
+      category: "drums",
       path: "test",
     });
     expect(error).not.toBeNull();

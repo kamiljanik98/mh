@@ -10,12 +10,9 @@ describe("updateSession", () => {
     expect(response.headers.get("location")).toBe("http://localhost:3000/");
   });
 
-  it("redirects unauthenticated user away from any /account/* subpath", async () => {
-    const request = new NextRequest(
-      new URL("http://localhost:3000/account/subpath"),
-    );
+  it("does not redirect on a public path", async () => {
+    const request = new NextRequest(new URL("http://localhost:3000/feed"));
     const response = await updateSession(request);
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe("http://localhost:3000/");
+    expect(response.status).toBe(200);
   });
 });
