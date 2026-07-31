@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CopyButton from "@/components/ui/copy-button";
+import { getCoverUrl } from "@/lib/r2/public";
 import { Send } from "lucide-react";
 
 export default async function UploadSuccessPage({
@@ -23,9 +24,7 @@ export default async function UploadSuccessPage({
   if (!song) notFound();
 
   const songUrl = `${process.env.NEXT_PUBLIC_APP_URL}/songs/${song.id}`;
-  const coverUrl = song.image_path
-    ? `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${song.image_path}`
-    : null;
+  const coverUrl = song.image_path ? getCoverUrl(song.image_path) : null;
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
