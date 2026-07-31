@@ -45,6 +45,9 @@ src/app/test
 # claude
 .claude
 
+# agent skills
+/.agents/
+
 # markdown files
 
 /docs/
