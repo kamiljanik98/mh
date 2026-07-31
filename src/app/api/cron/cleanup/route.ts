@@ -9,8 +9,12 @@ const BUCKETS = {
   stems: process.env.R2_BUCKET_STEMS!,
 } as const;
 
-async function listAllKeys(bucket: string): Promise<string[]> {
-  const keys: string[] = [];
+const MIN_ORPHAN_AGE_MS = 24 * 60 * 60 * 1000;
+
+type R2Object = { key: string; lastModified?: Date };
+
+async function listAllObjects(bucket: string): Promise<R2Object[]> {
+  const objects: R2Object[] = [];
   let continuationToken: string | undefined;
 
   do {
@@ -21,12 +25,14 @@ async function listAllKeys(bucket: string): Promise<string[]> {
       }),
     );
     for (const obj of result.Contents ?? []) {
-      if (obj.Key) keys.push(obj.Key);
+      if (obj.Key) {
+        objects.push({ key: obj.Key, lastModified: obj.LastModified });
+      }
     }
     continuationToken = result.NextContinuationToken;
   } while (continuationToken);
 
-  return keys;
+  return objects;
 }
 
 async function deleteKeys(
@@ -49,8 +55,14 @@ async function deleteKeys(
 }
 
 export async function GET(request: Request) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    console.error("CRON_SECRET is not set - refusing to run cleanup");
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -69,18 +81,26 @@ export async function GET(request: Request) {
     stems: new Set((stems ?? []).map((s) => s.path)),
   };
 
-  const orphaned: Record<string, string[]> = {};
   const deletionResults: Record<
     string,
     { deleted: string[]; failed: string[] }
   > = {};
 
-  for (const [bucketKey, bucketName] of Object.entries(BUCKETS)) {
-    const r2Keys = await listAllKeys(bucketName);
-    const validPaths = dbPaths[bucketKey as keyof typeof dbPaths];
-    const orphanedKeys = r2Keys.filter((key) => !validPaths.has(key));
+  const cutoff = Date.now() - MIN_ORPHAN_AGE_MS;
 
-    orphaned[bucketKey] = orphanedKeys;
+  for (const [bucketKey, bucketName] of Object.entries(BUCKETS)) {
+    const r2Objects = await listAllObjects(bucketName);
+    const validPaths = dbPaths[bucketKey as keyof typeof dbPaths];
+
+    const orphanedKeys = r2Objects
+      .filter(
+        (obj) =>
+          !validPaths.has(obj.key) &&
+          obj.lastModified !== undefined &&
+          obj.lastModified.getTime() < cutoff,
+      )
+      .map((obj) => obj.key);
+
     deletionResults[bucketKey] = await deleteKeys(bucketName, orphanedKeys);
   }
 
