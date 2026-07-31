@@ -29,7 +29,7 @@ export const deleteStem = async (stemId: string): Promise<DeleteStemResult> => {
     return { error: new Error("Stem not found") };
   }
 
-  if (stem.songs[0].uploaded_by !== user.id) {
+  if (stem.songs.uploaded_by !== user.id) {
     return { error: new Error("Not authorized to delete this stem") };
   }
 
@@ -53,6 +53,6 @@ export const deleteStem = async (stemId: string): Promise<DeleteStemResult> => {
     };
   }
 
-  revalidatePath("/account/me");
+  revalidatePath(`/songs/${stem.song_id}`);
   return { error: null };
 };
