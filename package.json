@@ -9,7 +9,16 @@
     "seed": "node --env-file=.env.local -r tsx/cjs seed/seed.ts",
     "gen-types": "npx supabase gen types --lang=typescript --local > src/types/database.types.ts",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "vitest related --run --passWithNoTests"
+    ]
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1062.0",
@@ -48,7 +57,9 @@
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.3.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.1",
     "typescript": "^5",
