@@ -6,13 +6,12 @@ import { Play, Pause } from "lucide-react";
 import { getAvatarUrl, getCoverUrl } from "@/lib/r2/public";
 import { formatSongMeta } from "@/lib/format/song-meta";
 import { formatRelativeTime } from "@/lib/format/relative-time";
-import { useWaveform } from "@/hooks/songs/use-waveform";
 import { TitleLink } from "@/components/songs/title-link";
 import { cn } from "@/lib/utils";
 import { Actions } from "./actions";
 import { Song } from "@/types";
-
-type CardVariant = "grid" | "row" | "waveform";
+import { Waveform } from "./waveform";
+import usePlayer from "@/hooks/player/use-player";
 
 export type SongCardProps = {
   song: Song;
@@ -33,22 +32,13 @@ export const Card = ({
   postedAt,
 }: SongCardProps) => {
   const meta = formatSongMeta(song);
-
-  const { rootRef, containerRef, isActive, isPlaying, handleClick } =
-    useWaveform({
-      songId: song.id,
-      path: song.path,
-      height: 32,
-      lazyMount: true,
-      onActivate: onPlay,
-    });
+  const activeId = usePlayer((s) => s.activeId);
+  const isPlaying = usePlayer((s) => s.isPlaying);
+  const isActive = activeId === song.id;
 
   if (variant === "waveform") {
     return (
-      <div
-        ref={rootRef}
-        className="group/item flex gap-3 rounded-md p-2 transition hover:bg-neutral-800"
-      >
+      <div className="group/item flex gap-3 rounded-md p-2 transition hover:bg-neutral-800">
         <Image
           src={getCoverUrl(song.image_path)}
           alt={song.title}
@@ -65,23 +55,13 @@ export const Card = ({
           {meta && (
             <p className="truncate text-xs text-muted-foreground">{meta}</p>
           )}
+          <Waveform
+            songId={song.id}
+            path={song.path}
+            onActivate={onPlay}
+            lazyMount={true}
+          />
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => onPlay(song.id)}
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105"
-              aria-label={isActive && isPlaying ? "Pause" : "Play"}
-            >
-              {isActive && isPlaying ? (
-                <Pause className="size-3.5" fill="currentColor" />
-              ) : (
-                <Play className="ml-0.5 size-3.5" fill="currentColor" />
-              )}
-            </button>
-            <div
-              ref={containerRef}
-              onClick={handleClick}
-              className="h-8 flex-1 cursor-pointer"
-            />
             <Actions
               songId={song.id}
               size="sm"
