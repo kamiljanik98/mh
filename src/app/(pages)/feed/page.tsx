@@ -1,5 +1,5 @@
 import { getFollowedArtistsSongs } from "@/actions/songs/get-followed-artists-songs";
-import { SuggestedUsers } from "@/components/social/suggested-users";
+import { SuggestedUsersList } from "@/components/social/suggested-users-list";
 import { createClient } from "@/lib/supabase/server";
 import { SongList } from "@/components/songs/song-list";
 import { AuthGate } from "@/components/auth/auth-gate";
@@ -27,7 +27,7 @@ export default async function FeedPage() {
           You&apos;re not following anyone yet — follow some artists to see
           their tracks here.
         </p>
-        <SuggestedUsers excludeUserId={currentUser.id} />
+        <SuggestedUsersList excludeUserId={currentUser.id} />
       </div>
     );
   }

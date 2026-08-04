@@ -7,7 +7,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ShareButton } from "@/components/social/share-button";
 import { FollowButton } from "@/components/social/follow-button";
-import { SuggestedUsers } from "@/components/social/suggested-users";
+import { SuggestedUsersList } from "@/components/social/suggested-users-list";
 import { getProfileByNickname } from "@/actions/profile/get-profile-by-nickname";
 import { getFollowStatus } from "@/actions/social/get-follow-status";
 import { getLikedSongs } from "@/actions/songs/get-liked-songs";
@@ -82,7 +82,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         </div>
 
         <aside className="flex w-72 shrink-0 flex-col gap-8">
-          <SuggestedUsers excludeUserId={profile.id} />
+          <SuggestedUsersList excludeUserId={profile.id} />
 
           {likedSongs.data.length > 0 && (
             <div>
