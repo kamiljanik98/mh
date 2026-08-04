@@ -42,8 +42,9 @@ next-env.d.ts
 
 src/app/test
 
-# claude
+# AI tooling — no trace in the repo for now (2026-08-04)
 .claude
+.mcp.json
 
 # agent skills
 /.agents/
@@ -63,7 +64,9 @@ src/app/test
 /DESIGN.md
 /PROBLEMS.md
 /seed/
-/READ-FIRST(Q&A).md
+/Q&A.md
+skills-lock.json
+/.codex
 
 /supabase/.branches
 /supabase/.temp

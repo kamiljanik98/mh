@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "supabase": {
-      "type": "http",
-      "url": "http://localhost:54321/mcp?read_only=true&features=development%2Cdebugging%2Cdatabase%2Cdocs"
-    }
-  }
-}
