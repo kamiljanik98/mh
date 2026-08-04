@@ -10,6 +10,7 @@ interface PlayerStore {
   progress: number;
   duration: number;
   seekTo: number | null;
+  playPauseRequested: boolean;
   setActiveId: (id: string) => void;
   setIds: (ids: string[]) => void;
   setSongs: (songs: Song[]) => void;
@@ -19,6 +20,8 @@ interface PlayerStore {
   setDuration: (duration: number) => void;
   requestSeek: (progress: number) => void;
   clearSeekRequest: () => void;
+  requestPlayPause: () => void;
+  clearPlayPauseRequest: () => void;
   reset: () => void;
 }
 
@@ -31,6 +34,7 @@ const usePlayer = create<PlayerStore>((set) => ({
   progress: 0,
   duration: 0,
   seekTo: null,
+  playPauseRequested: false,
   setActiveId: (id) => set({ activeId: id }),
   setIds: (ids) => set({ ids }),
   setSongs: (songs) => set({ songs }),
@@ -40,6 +44,8 @@ const usePlayer = create<PlayerStore>((set) => ({
   setDuration: (duration) => set({ duration }),
   requestSeek: (progress) => set({ seekTo: progress }),
   clearSeekRequest: () => set({ seekTo: null }),
+  requestPlayPause: () => set({ playPauseRequested: true }),
+  clearPlayPauseRequest: () => set({ playPauseRequested: false }),
   reset: () => set({ ids: [], activeId: null, songs: [] }),
 }));
 

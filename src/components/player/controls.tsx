@@ -19,6 +19,11 @@ export function Controls() {
   const ids = usePlayer((state) => state.ids);
   const setActiveId = usePlayer((state) => state.setActiveId);
   const volume = usePlayer((state) => state.volume);
+  const playPauseRequested = usePlayer((state) => state.playPauseRequested);
+  const requestPlayPause = usePlayer((state) => state.requestPlayPause);
+  const clearPlayPauseRequest = usePlayer(
+    (state) => state.clearPlayPauseRequest,
+  );
 
   const { song } = useGetSongById(activeId);
   const { url } = useLoadSongUrl(song?.path ?? null);
@@ -55,6 +60,16 @@ export function Controls() {
     audioRef.current.currentTime = seekTo * audioRef.current.duration;
     clearSeekRequest();
   }, [seekTo, clearSeekRequest]);
+
+  useEffect(() => {
+    if (playPauseRequested === false || !audioRef.current) return;
+    if (audioRef.current.paused) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+    clearPlayPauseRequest();
+  }, [playPauseRequested, clearPlayPauseRequest]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
