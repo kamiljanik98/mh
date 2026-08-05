@@ -3,7 +3,7 @@ import { SongList } from "@/components/songs/song-list";
 import { createClient } from "@/lib/supabase/server";
 import { AuthGate } from "@/components/auth/auth-gate";
 import { getFollowedUsers } from "@/actions/social/get-followed-users";
-import { FollowedUsersList } from "@/components/social/followed-users-list";
+import { ProfileGrid } from "@/components/social/profile-grid";
 
 export default async function LibraryPage() {
   const supabase = await createClient();
@@ -37,7 +37,7 @@ export default async function LibraryPage() {
           <h2 className="text-lg font-semibold text-neutral-100 py-8">Likes</h2>
           <SongList songs={likedSongs} />
         </div>
-        <FollowedUsersList users={followedUsers} />
+        <ProfileGrid title="Following" users={followedUsers} />
       </div>
     </>
   );

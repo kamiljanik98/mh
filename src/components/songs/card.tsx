@@ -13,7 +13,7 @@ import { Song } from "@/types";
 import { Waveform } from "./waveform";
 import usePlayer from "@/hooks/player/use-player";
 
-export type SongCardProps = {
+type SongCardProps = {
   song: Song;
   onPlay: (id: string) => void;
   showWaveform?: boolean;
