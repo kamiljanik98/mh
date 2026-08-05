@@ -1,15 +1,19 @@
 import { createClient } from "@/lib/supabase/server";
+import { attachIsLiked } from "./attach-is-liked";
+import { Song } from "@/types";
 
-export const getSongById = async (id: string) => {
+type GetSongByIdResult = { data: Song | null; error: Error | null };
+
+export const getSongById = async (id: string): Promise<GetSongByIdResult> => {
   const supabase = await createClient();
 
   const { data: song, error } = await supabase
     .from("songs")
-    .select(
-      `*, profiles!uploaded_by(nickname, avatar_url), stems(id, category, path)`,
-    )
+    .select(`*, profiles!uploaded_by(nickname, avatar_url), stems(*)`)
     .eq("id", id)
     .single();
 
-  return { song, error };
+  if (error || !song) return { data: null, error };
+
+  return { data: (await attachIsLiked(supabase, [song]))[0], error: null };
 };

@@ -7,11 +7,12 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ShareButton } from "@/components/social/share-button";
 import { FollowButton } from "@/components/social/follow-button";
-import { SuggestedUsersList } from "@/components/social/suggested-users-list";
+import { ProfileList } from "@/components/social/profile-list";
 import { getProfileByNickname } from "@/actions/profile/get-profile-by-nickname";
 import { getFollowStatus } from "@/actions/social/get-follow-status";
 import { getLikedSongs } from "@/actions/songs/get-liked-songs";
 import { SongList } from "@/components/songs/song-list";
+import { getSuggestedUsers } from "@/actions/social/get-suggested-users";
 
 type ProfilePageProps = {
   params: Promise<{ nickname: string }>;
@@ -19,16 +20,22 @@ type ProfilePageProps = {
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { nickname } = await params;
-  const { profile } = await getProfileByNickname(nickname);
+  const { profile, error: profileError } = await getProfileByNickname(nickname);
   const supabase = await createClient();
 
-  if (!profile) notFound();
+  if (profileError) {
+    return <p className="text-destructive">Failed to load profile</p>;
+  }
+
+  if (!profile) {
+    return notFound();
+  }
 
   const {
     data: { user: currentUser },
   } = await supabase.auth.getUser();
-  const isOwnProfile = currentUser?.id === profile.id;
 
+  const isOwnProfile = currentUser?.id === profile.id;
   const [songs, likedSongs, { isFollowing }] = await Promise.all([
     getUserSongs(profile.id),
     getLikedSongs(profile.id),
@@ -36,6 +43,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       ? Promise.resolve({ isFollowing: false })
       : getFollowStatus(profile.id),
   ]);
+
+  const { data: users, error: suggestedUsersError } = await getSuggestedUsers(
+    profile.id,
+  );
 
   return (
     <div className="px-6 py-10">
@@ -82,7 +93,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         </div>
 
         <aside className="flex w-72 shrink-0 flex-col gap-8">
-          <SuggestedUsersList excludeUserId={profile.id} />
+          {suggestedUsersError ? (
+            <p>Failed to fetch suggested users</p>
+          ) : (
+            <ProfileList title="Suggested Users for You" users={users} />
+          )}
+
+          {likedSongs.error && <p>Failed to fetch liked songs</p>}
 
           {likedSongs.data.length > 0 && (
             <div>

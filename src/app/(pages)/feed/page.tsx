@@ -1,8 +1,9 @@
 import { getFollowedArtistsSongs } from "@/actions/songs/get-followed-artists-songs";
-import { SuggestedUsersList } from "@/components/social/suggested-users-list";
+import { ProfileList } from "@/components/social/profile-list";
 import { createClient } from "@/lib/supabase/server";
 import { SongList } from "@/components/songs/song-list";
 import { AuthGate } from "@/components/auth/auth-gate";
+import { getSuggestedUsers } from "@/actions/social/get-suggested-users";
 
 export default async function FeedPage() {
   const supabase = await createClient();
@@ -14,20 +15,34 @@ export default async function FeedPage() {
     return <AuthGate message="Sign in to see songs from artists you follow." />;
   }
 
-  const { data: songs, error } = await getFollowedArtistsSongs();
+  const { data: songs, error: followedArtistsSongsError } =
+    await getFollowedArtistsSongs();
 
-  if (error) {
-    return <p className="text-destructive">Failed to load feed.</p>;
+  if (followedArtistsSongsError) {
+    return (
+      <p className="text-destructive">
+        Failed to load your followed artists&apos; songs.
+      </p>
+    );
   }
 
   if (songs.length === 0) {
+    const { data: users, error: suggestedUsersError } = await getSuggestedUsers(
+      currentUser.id,
+    );
     return (
       <div>
         <p className="text-muted-foreground">
           You&apos;re not following anyone yet — follow some artists to see
           their tracks here.
         </p>
-        <SuggestedUsersList excludeUserId={currentUser.id} />
+        {suggestedUsersError ? (
+          <p className="text-destructive">
+            Failed to load your suggested artists list.
+          </p>
+        ) : (
+          <ProfileList title="Suggested Users for You" users={users} />
+        )}
       </div>
     );
   }

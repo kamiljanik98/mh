@@ -15,7 +15,11 @@ type SongPageProps = {
 
 export default async function SongPage({ params }: SongPageProps) {
   const { id } = await params;
-  const { song } = await getSongById(id);
+  const { data: song, error: songError } = await getSongById(id);
+
+  if (songError) {
+    return <p className="text-destructive">Failed to load song</p>;
+  }
 
   if (!song) notFound();
 
@@ -37,22 +41,22 @@ export default async function SongPage({ params }: SongPageProps) {
               {song.title}
             </h1>
             <Link
-              href={`/profile/${song.profiles.nickname}`}
+              href={`/profile/${song.profiles?.nickname ?? ""}`}
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
             >
               <Image
-                src={getAvatarUrl(song.profiles.avatar_url)}
-                alt={song.profiles.nickname ?? "Artist avatar"}
+                src={getAvatarUrl(song.profiles?.avatar_url ?? null)}
+                alt={song.profiles?.nickname ?? "Artist avatar"}
                 width={20}
                 height={20}
                 className="size-5 rounded-full object-cover"
               />
-              {song.profiles.nickname}
+              {song.profiles?.nickname ?? "Unknown"}
             </Link>
             {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
           </div>
           <div className="flex items-center gap-3">
-            <LikeButton songId={song.id} />
+            <LikeButton songId={song.id} isLikedInitially={song.isLiked} />
             <ShareButton path={`/songs/${song.id}`} />
           </div>
         </div>
@@ -60,7 +64,7 @@ export default async function SongPage({ params }: SongPageProps) {
 
       <Waveform songId={song.id} path={song.path} />
 
-      <List stems={song.stems} />
+      <List stems={song.stems ?? []} />
     </div>
   );
 }

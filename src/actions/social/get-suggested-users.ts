@@ -1,10 +1,15 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { ProfileSummary } from "@/types";
 
 const SUGGESTION_LIMIT = 4;
 
-export const getSuggestedUsers = async (excludeUserId: string) => {
+type GetSuggestedUsersResult = { data: ProfileSummary[]; error: Error | null };
+
+export const getSuggestedUsers = async (
+  excludeUserId: string,
+): Promise<GetSuggestedUsersResult> => {
   const supabase = await createClient();
   const {
     data: { user: currentUser },
@@ -13,21 +18,24 @@ export const getSuggestedUsers = async (excludeUserId: string) => {
   const excludeIds = [excludeUserId];
   if (currentUser) {
     excludeIds.push(currentUser.id);
-    const { data: following } = await supabase
+    const { data: following, error: followsError } = await supabase
       .from("follows")
       .select("following_id")
       .eq("follower_id", currentUser.id);
+    if (followsError) {
+      return { data: [], error: followsError };
+    }
     excludeIds.push(...(following?.map((f) => f.following_id) ?? []));
   }
 
-  const { data, error } = await supabase
+  const { data, error: profilesError } = await supabase
     .from("profiles")
     .select("id, nickname, avatar_url")
     .not("id", "in", `(${excludeIds.join(",")})`)
     .limit(SUGGESTION_LIMIT * 3);
 
-  if (error || !data) return { users: [] };
+  if (profilesError || !data) return { data: [], error: profilesError };
 
   const shuffled = [...data].sort(() => Math.random() - 0.5);
-  return { users: shuffled.slice(0, SUGGESTION_LIMIT) };
+  return { data: shuffled.slice(0, SUGGESTION_LIMIT), error: null };
 };
