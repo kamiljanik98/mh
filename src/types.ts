@@ -15,7 +15,7 @@ export type EmailPasswordCredentials = {
   password: string;
 };
 
-export type FollowedProfile = Pick<
+export type ProfileSummary = Pick<
   UserProfile,
   "id" | "nickname" | "avatar_url"
 >;

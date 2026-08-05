@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { FollowedProfile } from "@/types";
+import { ProfileSummary } from "@/types";
 
-type GetFollowedUsersResult = { data: FollowedProfile[]; error: Error | null };
+type GetFollowedUsersResult = { data: ProfileSummary[]; error: Error | null };
 
 export const getFollowedUsers = async (
   userId: string,
@@ -19,7 +19,7 @@ export const getFollowedUsers = async (
 
   const profiles = data
     .map((f) => (Array.isArray(f.profiles) ? f.profiles[0] : f.profiles))
-    .filter((p): p is FollowedProfile => Boolean(p));
+    .filter((p): p is ProfileSummary => Boolean(p));
 
   return { data: profiles, error: null };
 };
