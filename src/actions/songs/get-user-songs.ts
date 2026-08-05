@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Song } from "@/types";
-import { attachIsLiked } from "./attach-is-liked";
+import { attachIsLiked } from "@/lib/attach-is-liked";
 
 export async function getUserSongs(userId: string): Promise<Song[]> {
   const supabase = await createClient();

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { attachIsLiked } from "./attach-is-liked";
+import { attachIsLiked } from "@/lib/attach-is-liked";
 import { Song } from "@/types";
 
 type GetSongByIdResult = { data: Song | null; error: Error | null };

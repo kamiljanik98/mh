@@ -1,8 +1,9 @@
 import { Song } from "@/types";
+import { Database } from "@/types/database.types";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export const attachIsLiked = async (
-  supabase: SupabaseClient,
+  supabase: SupabaseClient<Database>,
   songs: Song[],
 ): Promise<Song[]> => {
   if (songs.length === 0) return songs;

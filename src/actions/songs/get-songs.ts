@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { Song } from "@/types";
-import { attachIsLiked } from "./attach-is-liked";
+import { attachIsLiked } from "@/lib/attach-is-liked";
 
 type GetSongsResult = { data: Song[]; error: Error | null };
 
