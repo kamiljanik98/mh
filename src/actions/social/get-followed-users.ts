@@ -1,15 +1,13 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { UserProfile } from "@/types";
+import { FollowedProfile } from "@/types";
 
-type FollowedProfile = Pick<UserProfile, "id" | "nickname" | "avatar_url">;
+type GetFollowedUsersResult = { data: FollowedProfile[]; error: Error | null };
 
-type GetFollowingResult = { data: FollowedProfile[]; error: Error | null };
-
-export const getFollowing = async (
+export const getFollowedUsers = async (
   userId: string,
-): Promise<GetFollowingResult> => {
+): Promise<GetFollowedUsersResult> => {
   const supabase = await createClient();
 
   const { data, error } = await supabase

@@ -2,7 +2,7 @@ import { getLikedSongs } from "@/actions/songs/get-liked-songs";
 import { SongList } from "@/components/songs/song-list";
 import { createClient } from "@/lib/supabase/server";
 import { AuthGate } from "@/components/auth/auth-gate";
-import { getFollowing } from "@/actions/social/get-following";
+import { getFollowedUsers } from "@/actions/social/get-followed-users";
 import { FollowedUsersList } from "@/components/social/followed-users-list";
 
 export default async function LibraryPage() {
@@ -15,7 +15,21 @@ export default async function LibraryPage() {
     return <AuthGate message="Sign in to see your library." />;
   }
 
-  const { data: likedSongs } = await getLikedSongs(currentUser.id);
+  const { data: likedSongs, error: likedError } = await getLikedSongs(
+    currentUser.id,
+  );
+  const { data: followedUsers, error: followedError } = await getFollowedUsers(
+    currentUser.id,
+  );
+
+  if (likedError) {
+    return <p className="text-destructive">Failed to load liked songs</p>;
+  }
+
+  if (followedError) {
+    return <p className="text-destructive">Failed to load followed users</p>;
+  }
+
   return (
     <>
       <div className="text-sm text-foreground">
@@ -23,7 +37,7 @@ export default async function LibraryPage() {
           <h2 className="text-lg font-semibold text-neutral-100 py-8">Likes</h2>
           <SongList songs={likedSongs} />
         </div>
-        <FollowedUsersList userId={currentUser.id} />
+        <FollowedUsersList users={followedUsers} />
       </div>
     </>
   );
