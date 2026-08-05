@@ -19,7 +19,6 @@ export type SongCardProps = {
   showWaveform?: boolean;
   variant?: "grid" | "row" | "waveform";
   isLikedInitially?: boolean;
-  onLikeToggle?: (isLiked: boolean) => void;
   postedAt?: string;
 };
 
@@ -28,7 +27,6 @@ export const Card = ({
   onPlay,
   variant = "grid",
   isLikedInitially = false,
-  onLikeToggle,
   postedAt,
 }: SongCardProps) => {
   const meta = formatSongMeta(song);
@@ -66,7 +64,6 @@ export const Card = ({
               songId={song.id}
               size="sm"
               isLikedInitially={isLikedInitially}
-              onLikeToggle={onLikeToggle}
             />
           </div>
         </div>
@@ -139,7 +136,6 @@ export const Card = ({
           songId={song.id}
           size="sm"
           isLikedInitially={isLikedInitially}
-          onLikeToggle={onLikeToggle}
         />
       </div>
     );
@@ -190,7 +186,6 @@ export const Card = ({
           songId={song.id}
           size="sm"
           isLikedInitially={isLikedInitially}
-          onLikeToggle={onLikeToggle}
         />
       </div>
     </div>

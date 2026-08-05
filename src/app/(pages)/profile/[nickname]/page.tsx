@@ -89,7 +89,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <h2 className="mb-4 text-lg font-semibold text-neutral-100">
                 Likes
               </h2>
-              <SongList songs={likedSongs.data} removeOnUnlike />
+              <SongList songs={likedSongs.data} />
             </div>
           )}
         </aside>

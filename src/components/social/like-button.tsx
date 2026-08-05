@@ -7,15 +7,13 @@ import { useLike } from "@/hooks/social/use-like";
 type LikeButtonProps = {
   songId: string;
   isLikedInitially?: boolean;
-  onToggle?: (isLiked: boolean) => void;
 };
 
 export function LikeButton({
   songId,
   isLikedInitially = false,
-  onToggle,
 }: LikeButtonProps) {
-  const { isLiked, toggle } = useLike(songId, isLikedInitially, onToggle);
+  const { isLiked, toggle } = useLike(songId, isLikedInitially);
 
   function handleClick(e: React.MouseEvent) {
     e.stopPropagation();

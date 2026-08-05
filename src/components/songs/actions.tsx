@@ -5,21 +5,12 @@ type ActionsProps = {
   songId: string;
   size?: "sm" | "default";
   isLikedInitially?: boolean;
-  onLikeToggle?: (isLiked: boolean) => void;
 };
 
-export function Actions({
-  songId,
-  isLikedInitially = false,
-  onLikeToggle,
-}: ActionsProps) {
+export function Actions({ songId, isLikedInitially = false }: ActionsProps) {
   return (
     <div className="flex items-center gap-1">
-      <LikeButton
-        songId={songId}
-        isLikedInitially={isLikedInitially}
-        onToggle={onLikeToggle}
-      />
+      <LikeButton songId={songId} isLikedInitially={isLikedInitially} />
       <ShareButton path={`/songs/${songId}`} iconOnly />
     </div>
   );
