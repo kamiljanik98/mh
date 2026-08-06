@@ -1,36 +1,13 @@
-import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
-import useUser from "./use-user";
+import { changePassword } from "@/actions/auth/change-password";
 
 const useChangePassword = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const user = useUser((state) => state.user);
 
-  const change = async (
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<{ error: Error | null }> => {
-    if (!user?.email) {
-      return { error: new Error("Not authenticated") };
-    }
-
+  const change = async (currentPassword: string, password: string) => {
     setIsLoading(true);
-    const supabase = createClient();
-    const { error: reauthError } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: oldPassword,
-    });
-
-    if (reauthError) {
-      setIsLoading(false);
-      return { error: new Error("Current password is incorrect") };
-    }
-
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
+    const { error } = await changePassword({ currentPassword, password });
     setIsLoading(false);
-
     return { error };
   };
 
