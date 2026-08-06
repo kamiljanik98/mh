@@ -82,6 +82,7 @@ export function useWaveform({
     return () => {
       cancelled = true;
       wavesurferRef.current?.destroy();
+      wavesurferRef.current = null;
     };
   }, [isVisible, path, height, barWidth, barGap, barRadius]);
 
