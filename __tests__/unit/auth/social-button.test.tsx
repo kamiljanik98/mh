@@ -12,10 +12,21 @@ vi.mock("next/image", () => ({
 }));
 
 describe("SocialButton", () => {
-  it("renders icon with correct src and alt for provider", () => {
-    render(<SocialButton provider="discord" onClick={vi.fn()} />);
-    const img = screen.getByAltText("discord logo");
+  it("renders the provider icon as decorative", () => {
+    const { container } = render(
+      <SocialButton provider="discord" onClick={vi.fn()} />
+    );
+    const img = container.querySelector("img");
     expect(img).toHaveAttribute("src", "/discord.svg");
+    expect(img).toHaveAttribute("alt", "");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
+  it("names the button with a visible label", () => {
+    render(<SocialButton provider="discord" onClick={vi.fn()} />);
+    expect(
+      screen.getByRole("button", { name: "Continue with Discord" })
+    ).toBeInTheDocument();
   });
 
   it("calls onClick when clicked", async () => {

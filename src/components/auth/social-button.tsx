@@ -8,15 +8,21 @@ interface SocialButtonProps {
   disabled?: boolean;
 }
 
+const providerLabels: Partial<Record<Provider, string>> = {
+  discord: "Discord",
+};
+
 const SocialButton = ({ provider, onClick, disabled }: SocialButtonProps) => {
   return (
-    <Button type="button" variant="ghost" onClick={onClick} disabled={disabled}>
-      <Image
-        src={`/${provider}.svg`}
-        alt={`${provider} logo`}
-        width={16}
-        height={16}
-      />
+    <Button
+      type="button"
+      variant="ghost"
+      className="flex gap-2.5 p-6"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <Image src={`/${provider}.svg`} alt="" width={20} height={20} />
+      Continue with {providerLabels[provider] ?? provider}
     </Button>
   );
 };
