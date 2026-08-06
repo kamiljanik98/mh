@@ -1,5 +1,6 @@
 import usePlayer from "@/hooks/player/use-player";
 import type { Song } from "@/types";
+import { useCallback } from "react";
 
 export function useOnPlay(songs: Song[]) {
   const activeId = usePlayer((state) => state.activeId);
@@ -8,15 +9,18 @@ export function useOnPlay(songs: Song[]) {
   const setSongs = usePlayer((state) => state.setSongs);
   const requestPlayPause = usePlayer((state) => state.requestPlayPause);
 
-  const onPlay = (id: string) => {
-    if (id === activeId) {
-      return requestPlayPause();
-    } else {
-      setSongs(songs);
-      setIds(songs.map((song) => song.id));
-      setActiveId(id);
-    }
-  };
+  const onPlay = useCallback(
+    (id: string) => {
+      if (id === activeId) {
+        return requestPlayPause();
+      } else {
+        setSongs(songs);
+        setIds(songs.map((song) => song.id));
+        setActiveId(id);
+      }
+    },
+    [songs, activeId, requestPlayPause, setSongs, setIds, setActiveId],
+  );
 
   return onPlay;
 }
