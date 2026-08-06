@@ -65,15 +65,6 @@ export const deleteSong = async (id: string): Promise<DeleteSongResult> => {
     return { error: new Error("Failed to delete some files, aborted") };
   }
 
-  const { error: deleteStemsError } = await supabase
-    .from("stems")
-    .delete()
-    .eq("song_id", id);
-
-  if (deleteStemsError) {
-    return { error: new Error(deleteStemsError.message) };
-  }
-
   const { error: deleteSongError } = await supabase
     .from("songs")
     .delete()
