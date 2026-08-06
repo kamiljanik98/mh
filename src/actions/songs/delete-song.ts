@@ -83,6 +83,6 @@ export const deleteSong = async (id: string): Promise<DeleteSongResult> => {
     return { error: new Error(deleteSongError.message) };
   }
 
-  revalidatePath("/account/me");
+  revalidatePath(`/profile/[nickname]`, "page");
   return { error: null };
 };
