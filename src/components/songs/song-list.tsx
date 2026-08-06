@@ -14,7 +14,7 @@ export function SongList({ songs }: SongListProps) {
   if (!songs.length) return null;
 
   return (
-    <div>
+    <div className="flex flex-col gap-2.5 w-fit">
       {songs.map((song) => (
         <Card
           key={song.id}
