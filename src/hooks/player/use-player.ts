@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Song } from "@/types";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface PlayerStore {
   ids: string[];
@@ -25,28 +26,37 @@ interface PlayerStore {
   reset: () => void;
 }
 
-const usePlayer = create<PlayerStore>((set) => ({
-  ids: [],
-  activeId: null,
-  songs: [],
-  volume: 1,
-  isPlaying: false,
-  progress: 0,
-  duration: 0,
-  seekTo: null,
-  playPauseRequested: false,
-  setActiveId: (id) => set({ activeId: id }),
-  setIds: (ids) => set({ ids }),
-  setSongs: (songs) => set({ songs }),
-  setVolume: (volume) => set({ volume }),
-  setIsPlaying: (isPlaying) => set({ isPlaying }),
-  setProgress: (progress) => set({ progress }),
-  setDuration: (duration) => set({ duration }),
-  requestSeek: (progress) => set({ seekTo: progress }),
-  clearSeekRequest: () => set({ seekTo: null }),
-  requestPlayPause: () => set({ playPauseRequested: true }),
-  clearPlayPauseRequest: () => set({ playPauseRequested: false }),
-  reset: () => set({ ids: [], activeId: null, songs: [] }),
-}));
+const usePlayer = create<PlayerStore>()(
+  persist(
+    (set) => ({
+      ids: [],
+      activeId: null,
+      songs: [],
+      volume: 1,
+      isPlaying: false,
+      progress: 0,
+      duration: 0,
+      seekTo: null,
+      playPauseRequested: false,
+      setActiveId: (id) => set({ activeId: id }),
+      setIds: (ids) => set({ ids }),
+      setSongs: (songs) => set({ songs }),
+      setVolume: (volume) => set({ volume }),
+      setIsPlaying: (isPlaying) => set({ isPlaying }),
+      setProgress: (progress) => set({ progress }),
+      setDuration: (duration) => set({ duration }),
+      requestSeek: (progress) => set({ seekTo: progress }),
+      clearSeekRequest: () => set({ seekTo: null }),
+      requestPlayPause: () => set({ playPauseRequested: true }),
+      clearPlayPauseRequest: () => set({ playPauseRequested: false }),
+      reset: () => set({ ids: [], activeId: null, songs: [] }),
+    }),
+    {
+      name: "musichub-player",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ volume: state.volume }),
+    },
+  ),
+);
 
 export default usePlayer;
