@@ -14,13 +14,13 @@ const useRegister = () => {
     setIsLoading(true);
     nickname = nickname.toLowerCase();
 
-    const { data: exisitng } = await supabase
+    const { data: existing } = await supabase
       .from("profiles")
       .select("id")
       .eq("nickname", nickname)
       .maybeSingle();
 
-    if (exisitng) {
+    if (existing) {
       setIsLoading(false);
       return { error: new Error("Nickname already taken") };
     }
