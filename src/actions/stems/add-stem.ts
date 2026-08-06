@@ -1,6 +1,6 @@
 "use server";
 
-import { uploadStem } from "@/lib/r2/upload";
+import { uploadStem, deleteFromR2 } from "@/lib/r2/upload";
 import { createClient } from "@/lib/supabase/server";
 import { Database } from "@/types/database.types";
 import { revalidatePath } from "next/cache";
@@ -55,7 +55,12 @@ export const addStem = async (
   });
 
   if (insertError) {
-    return { error: new Error("Faile to save stem record") };
+    try {
+      await deleteFromR2("stems", path);
+    } catch {
+      console.error("Orphaned stem after failed DB insert:", path);
+    }
+    return { error: insertError };
   }
 
   revalidatePath(`/songs/${songId}`);
