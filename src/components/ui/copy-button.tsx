@@ -16,7 +16,12 @@ export default function CopyButton({ value }: { value: string }) {
   }
 
   return (
-    <Button variant="outline" size="icon" onClick={handleCopy}>
+    <Button
+      className="relative"
+      variant="outline"
+      size="icon"
+      onClick={handleCopy}
+    >
       <span
         className={`transition-all duration-200 ${
           copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
