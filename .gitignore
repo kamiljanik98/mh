@@ -68,6 +68,6 @@ src/app/test
 skills-lock.json
 /.codex
 
-/supabase/.branches
-/supabase/.temp
+.branches
+.temp
 /supabase/.env
