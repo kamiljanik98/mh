@@ -5,7 +5,25 @@ import usePlayer from "@/hooks/player/use-player";
 import { useGetSongById } from "@/hooks/songs/use-get-song-by-id";
 import { useLoadSongUrl } from "@/hooks/songs/use-load-song-url";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
+const SILENT_PLAY_ERRORS = ["NotAllowedError", "NotSupportedError"];
+
+function playErrorMessage(error: unknown): string | null {
+  if (error instanceof DOMException && SILENT_PLAY_ERRORS.includes(error.name))
+    return null;
+  return "Playback failed";
+}
+
+function mediaErrorMessage(error: MediaError | null): string | null {
+  if (!error || error.code === MediaError.MEDIA_ERR_ABORTED) return null;
+  if (error.code === MediaError.MEDIA_ERR_NETWORK)
+    return "Lost connection while loading this track";
+  if (error.code === MediaError.MEDIA_ERR_DECODE)
+    return "This track's audio file is corrupted";
+  return "This track's format isn't supported by your browser";
+}
 
 export function Controls() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -20,13 +38,20 @@ export function Controls() {
   const setActiveId = usePlayer((state) => state.setActiveId);
   const volume = usePlayer((state) => state.volume);
   const playPauseRequested = usePlayer((state) => state.playPauseRequested);
-  const requestPlayPause = usePlayer((state) => state.requestPlayPause);
   const clearPlayPauseRequest = usePlayer(
     (state) => state.clearPlayPauseRequest,
   );
 
   const { song } = useGetSongById(activeId);
-  const { url } = useLoadSongUrl(song?.path ?? null);
+  const { url, error: loadError } = useLoadSongUrl(song?.path ?? null);
+
+  const attemptPlay = useCallback(() => {
+    audioRef.current?.play().catch((error: unknown) => {
+      setIsPlaying(false);
+      const message = playErrorMessage(error);
+      if (message) toast.error(message);
+    });
+  }, [setIsPlaying]);
 
   const handleNext = useCallback(() => {
     if (!ids.length || !activeId) return;
@@ -43,11 +68,17 @@ export function Controls() {
   }, [ids, activeId, setActiveId]);
 
   useEffect(() => {
+    if (!loadError) return;
+    setIsPlaying(false);
+    toast.error("Couldn't load this track");
+  }, [loadError, setIsPlaying]);
+
+  useEffect(() => {
     if (!audioRef.current || !url) return;
     audioRef.current.src = url;
-    audioRef.current.play().catch(() => setIsPlaying(false));
+    attemptPlay();
     audioRef.current.onended = handleNext;
-  }, [url, handleNext, setIsPlaying]);
+  }, [url, handleNext, attemptPlay]);
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -64,17 +95,17 @@ export function Controls() {
   useEffect(() => {
     if (playPauseRequested === false || !audioRef.current) return;
     if (audioRef.current.paused) {
-      audioRef.current.play().catch(() => {});
+      attemptPlay();
     } else {
       audioRef.current.pause();
     }
     clearPlayPauseRequest();
-  }, [playPauseRequested, clearPlayPauseRequest]);
+  }, [playPauseRequested, clearPlayPauseRequest, attemptPlay]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (audioRef.current.paused) {
-      audioRef.current.play().catch(() => {});
+      attemptPlay();
     } else {
       audioRef.current.pause();
     }
@@ -88,6 +119,11 @@ export function Controls() {
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={() => setIsPlaying(false)}
+        onError={(e) => {
+          setIsPlaying(false);
+          const message = mediaErrorMessage(e.currentTarget.error);
+          if (message) toast.error(message);
+        }}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onTimeUpdate={(e) => {
           const el = e.currentTarget;
