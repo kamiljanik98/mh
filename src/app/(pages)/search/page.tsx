@@ -1,13 +1,13 @@
-import { getSongs } from "@/actions/songs/get-songs";
+import { getSearchedSongs } from "@/actions/songs/get-searched-songs";
 import { Content } from "@/components/search/content";
 
 type SearchPageProps = {
-  searchParams: Promise<{ title?: string }>;
+  searchParams: Promise<{ query?: string }>;
 };
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const { title } = await searchParams;
-  const { data: songs, error } = await getSongs(title);
+  const { query } = await searchParams;
+  const { data: songs, error } = await getSearchedSongs(query);
 
   if (error) {
     return (
@@ -17,5 +17,5 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     );
   }
 
-  return <Content songs={songs} title={title} />;
+  return <Content songs={songs} query={query} />;
 }

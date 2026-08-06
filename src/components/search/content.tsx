@@ -6,16 +6,16 @@ import { Card } from "@/components/songs/card";
 
 type ContentProps = {
   songs: Song[];
-  title?: string;
+  query?: string;
 };
 
-export const Content = ({ songs, title }: ContentProps) => {
+export const Content = ({ songs, query }: ContentProps) => {
   const onPlay = useOnPlay(songs);
 
   return (
     <div className="p-6">
       <h1 className="mb-4 text-lg font-semibold text-foreground">
-        {title ? `Search results for "${title}"` : "All tracks"}
+        {query ? `Search results for "${query}"` : "All tracks"}
       </h1>
       {songs.length === 0 ? (
         <p className="text-sm text-muted-foreground">No results found</p>

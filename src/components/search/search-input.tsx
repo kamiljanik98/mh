@@ -11,11 +11,11 @@ export const SearchInput = () => {
   const router = useRouter();
   const { suggestions } = useSearchSuggestions(value);
 
-  const navigateToSearch = (title: string) => {
-    const trimmed = title.trim();
+  const navigateToSearch = (query: string) => {
+    const trimmed = query.trim();
     if (!trimmed) return;
     setValue(trimmed);
-    router.push(`/search?title=${encodeURIComponent(trimmed)}`);
+    router.push(`/search?query=${encodeURIComponent(trimmed)}`);
     setIsOpen(false);
   };
 
