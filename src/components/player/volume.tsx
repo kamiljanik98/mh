@@ -34,6 +34,11 @@ export function Volume() {
         value={[volume * 100]}
         max={100}
         step={1}
+        onPointerDown={() => {
+          if (volume !== 0) {
+            previousVolume.current = volume;
+          }
+        }}
         onValueChange={([value]) => setVolume(value / 100)}
         className="w-24"
       />
