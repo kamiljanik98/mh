@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "./use-debounce";
 import { createClient } from "@/lib/supabase/client";
 
