@@ -11,12 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import FormInput from "@/components/form/form-input";
 import FormTextarea from "@/components/form/form-textarea";
 import FormInputAvatar from "@/components/profile/edit/form-input-avatar";
-import { EditPasswordField } from "@/components/profile/edit/edit-password-field";
 import useUpdateProfile from "@/hooks/profile/use-update-profile";
 import {
   profileSchema,
@@ -78,46 +76,33 @@ export function EditProfileDialog() {
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="profile">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="profile">
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
-              <FormInputAvatar
-                name="avatar"
-                control={form.control}
-                currentAvatarPath={user?.avatar_url ?? null}
-              />
-              <FormInput
-                name="nickname"
-                control={form.control}
-                label="Nickname"
-                placeholder="Nickname"
-              />
-              <FormTextarea
-                name="bio"
-                control={form.control}
-                label="Bio"
-                placeholder="Tell people about yourself"
-                maxLength={800}
-                rows={4}
-              />
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save changes"}
-              </Button>
-            </form>
-          </TabsContent>
-
-          <TabsContent value="password">
-            <EditPasswordField />
-          </TabsContent>
-        </Tabs>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <FormInputAvatar
+            name="avatar"
+            control={form.control}
+            currentAvatarPath={user?.avatar_url ?? null}
+          />
+          <FormInput
+            name="nickname"
+            control={form.control}
+            label="Nickname"
+            placeholder="Nickname"
+          />
+          <FormTextarea
+            name="bio"
+            control={form.control}
+            label="Bio"
+            placeholder="Tell people about yourself"
+            maxLength={800}
+            rows={4}
+          />
+          <Button variant="secondary" type="submit" disabled={isLoading}>
+            {isLoading ? "Saving..." : "Save changes"}
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, User2Icon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,8 +39,17 @@ export const UserProfileButton = () => {
             href={`/profile/${user.nickname}`}
             className="flex items-center gap-2"
           >
+            <User2Icon size={14} />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link
+            href={`/profile/${user.nickname}/settings`}
+            className="flex items-center gap-2"
+          >
             <Settings size={14} />
-            Account settings
+            Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem
