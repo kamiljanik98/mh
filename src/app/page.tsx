@@ -1,4 +1,4 @@
-import { Grid } from "@/components/songs/grid";
+import { Shelf } from "@/components/songs/shelf";
 
 export default async function HomePage() {
   return (
@@ -7,7 +7,7 @@ export default async function HomePage() {
         <h2 className="text-lg font-semibold text-neutral-100 mb-6">
           Discover this week
         </h2>
-        <Grid />
+        <Shelf />
       </section>
       <section className="px-6 py-10 min-w-6xl mx-auto">
         <h2 className="text-lg font-semibold text-neutral-100 mb-6">

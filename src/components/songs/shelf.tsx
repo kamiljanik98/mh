@@ -6,7 +6,7 @@ import { useGetSongs } from "@/hooks/songs/use-get-songs";
 import { useOnPlay } from "@/hooks/player/use-on-play";
 import { Card } from "@/components/songs/card";
 
-export const Grid = () => {
+export const Shelf = () => {
   const { songs, isLoading, error } = useGetSongs();
   const onPlay = useOnPlay(songs);
   const scrollRef = useRef<HTMLDivElement>(null);
