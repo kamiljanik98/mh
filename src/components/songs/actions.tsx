@@ -3,7 +3,6 @@ import { ShareButton } from "@/components/social/share-button";
 
 type ActionsProps = {
   songId: string;
-  size?: "sm" | "default";
   isLikedInitially?: boolean;
 };
 

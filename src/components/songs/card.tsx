@@ -60,11 +60,7 @@ export const Card = ({
             lazyMount={true}
           />
           <div className="flex items-center gap-2">
-            <Actions
-              songId={song.id}
-              size="sm"
-              isLikedInitially={isLikedInitially}
-            />
+            <Actions songId={song.id} isLikedInitially={isLikedInitially} />
           </div>
         </div>
       </div>
@@ -132,11 +128,7 @@ export const Card = ({
           </p>
         )}
 
-        <Actions
-          songId={song.id}
-          size="sm"
-          isLikedInitially={isLikedInitially}
-        />
+        <Actions songId={song.id} isLikedInitially={isLikedInitially} />
       </div>
     );
   }
@@ -182,11 +174,7 @@ export const Card = ({
             {meta || "No data..."}
           </p>
         </div>
-        <Actions
-          songId={song.id}
-          size="sm"
-          isLikedInitially={isLikedInitially}
-        />
+        <Actions songId={song.id} isLikedInitially={isLikedInitially} />
       </div>
     </div>
   );
