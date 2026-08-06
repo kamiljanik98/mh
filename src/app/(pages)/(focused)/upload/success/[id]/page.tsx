@@ -29,24 +29,16 @@ export default async function UploadSuccessPage({
   }
 
   const songUrl = `${process.env.NEXT_PUBLIC_APP_URL}/songs/${song.id}`;
-  const coverUrl = song.image_path ? getCoverUrl(song.image_path) : null;
+  const coverUrl = getCoverUrl(song.image_path);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-sm flex flex-col gap-4">
-        {coverUrl === null ? (
-          <img
-            src="/no-photos.png"
-            alt="No cover"
-            className="w-full aspect-square object-cover opacity-10 grayscale"
-          />
-        ) : (
-          <img
-            src={coverUrl}
-            alt={song.title}
-            className="w-full aspect-square object-cover"
-          />
-        )}
+        <img
+          src={coverUrl}
+          alt={song.title}
+          className="w-full aspect-square object-cover"
+        />
 
         <div className="flex flex-col gap-1 border-l-2 border-border pl-3">
           <p className="text-xs text-muted-foreground uppercase tracking-widest">
