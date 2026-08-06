@@ -14,6 +14,9 @@ export default async function UploadSuccessPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
+  const {
+    data: { user: currentUser },
+  } = await supabase.auth.getUser();
 
   const { data: song } = await supabase
     .from("songs")
@@ -21,7 +24,9 @@ export default async function UploadSuccessPage({
     .eq("id", id)
     .single();
 
-  if (!song) notFound();
+  if (!currentUser || song?.uploaded_by !== currentUser.id) {
+    return notFound();
+  }
 
   const songUrl = `${process.env.NEXT_PUBLIC_APP_URL}/songs/${song.id}`;
   const coverUrl = song.image_path ? getCoverUrl(song.image_path) : null;
