@@ -45,7 +45,7 @@ export const addStem = async (
   try {
     await uploadStem(file, path);
   } catch {
-    return { error: new Error("Failed to load stem file") };
+    return { error: new Error("Failed to upload stem file") };
   }
 
   const { error: insertError } = await supabase.from("stems").insert({
