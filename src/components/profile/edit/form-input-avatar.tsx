@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { getAvatarUrl } from "@/lib/r2/public";
@@ -19,6 +18,11 @@ const FormInputAvatar = <T extends FieldValues>({
 }: FormInputAvatarProps<T>) => {
   const [preview, setPreview] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!preview) return;
+    return () => URL.revokeObjectURL(preview);
+  }, [preview]);
+
   return (
     <Controller
       name={name}
@@ -28,11 +32,9 @@ const FormInputAvatar = <T extends FieldValues>({
           <FieldLabel>Avatar</FieldLabel>
           <div className="flex items-center gap-4">
             <div className="size-16 rounded-full overflow-hidden bg-muted shrink-0">
-              <Image
+              <img
                 src={preview ?? getAvatarUrl(currentAvatarPath)}
                 alt="Avatar preview"
-                width={64}
-                height={64}
                 className="size-full object-cover"
               />
             </div>
