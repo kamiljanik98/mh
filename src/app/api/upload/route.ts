@@ -7,6 +7,7 @@ import {
   deleteFromR2,
 } from "@/lib/r2/upload";
 import type { Database } from "@/types/database.types";
+import { validateImageFile } from "@/lib/validations/files";
 
 type SongInsert = Database["public"]["Tables"]["songs"]["Insert"];
 type StemInsert = Database["public"]["Tables"]["stems"]["Insert"];
@@ -18,9 +19,7 @@ const ALLOWED_AUDIO_TYPES = [
   "audio/flac",
   "audio/aac",
 ];
-const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_AUDIO_BYTES = 200 * 1024 * 1024;
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const STEM_CATEGORIES: StemCategory[] = [
   "vocals",
   "drums",
@@ -82,16 +81,11 @@ export async function POST(req: NextRequest) {
     );
   }
   if (coverFile instanceof File) {
-    if (!ALLOWED_IMAGE_TYPES.includes(coverFile.type)) {
+    const { error, code } = validateImageFile(coverFile);
+    if (error) {
       return NextResponse.json(
-        { error: "Unsupported image format" },
-        { status: 415 },
-      );
-    }
-    if (coverFile.size > MAX_IMAGE_BYTES) {
-      return NextResponse.json(
-        { error: "Cover image exceeds 5 MB limit" },
-        { status: 413 },
+        { error: error.message },
+        { status: code === "FORMAT" ? 415 : 413 },
       );
     }
   }

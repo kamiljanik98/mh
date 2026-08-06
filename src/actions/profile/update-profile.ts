@@ -3,6 +3,7 @@
 import { randomUUID } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import { uploadAvatar, deleteFromR2 } from "@/lib/r2/upload";
+import { safeImageExtension, validateImageFile } from "@/lib/validations/files";
 
 type UpdateProfileInput = {
   nickname: string;
@@ -50,7 +51,12 @@ export async function updateProfile(
   let newAvatarPath: string | null = null;
 
   if (input.avatarFile) {
-    const extension = input.avatarFile.name.split(".").pop();
+    const { error } = validateImageFile(input.avatarFile);
+    if (error) {
+      return { error, avatarUrl: null };
+    }
+
+    const extension = safeImageExtension(input.avatarFile);
     newAvatarPath = `${user.id}/${randomUUID()}.${extension}`;
 
     try {

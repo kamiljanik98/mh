@@ -3,6 +3,7 @@
 import { randomUUID } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import { uploadCover, deleteFromR2 } from "@/lib/r2/upload";
+import { validateImageFile, safeImageExtension } from "@/lib/validations/files";
 
 export async function updateSongCover(id: string, file: File) {
   const supabase = await createClient();
@@ -30,8 +31,14 @@ export async function updateSongCover(id: string, file: File) {
   }
 
   const oldImagePath = song.image_path;
-  const extension = file.name.split(".").pop();
+  const extension = safeImageExtension(file);
   const newImagePath = `${user.id}/${randomUUID()}.${extension}`;
+
+  const { error } = validateImageFile(file);
+
+  if (error) {
+    return { error };
+  }
 
   try {
     await uploadCover(file, newImagePath);
