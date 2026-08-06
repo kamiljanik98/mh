@@ -31,7 +31,11 @@ export const getSuggestedUsers = async (
   const { data, error: profilesError } = await supabase
     .from("profiles")
     .select("id, nickname, avatar_url")
-    .not("id", "in", `(${excludeIds.join(",")})`)
+    .not(
+      "id",
+      "in",
+      `(${excludeIds.map((i) => (/[,()]/.test(i) ? `"${i}"` : i)).join(",")})`,
+    )
     .limit(SUGGESTION_LIMIT * 3);
 
   if (profilesError || !data) return { data: [], error: profilesError };
