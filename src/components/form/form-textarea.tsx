@@ -6,39 +6,45 @@ type FormTextareaProps<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;
   label: string;
-  maxLength?: number;
+  maxWords?: number;
 } & React.ComponentProps<typeof Textarea>;
 
 const FormTextarea = <T extends FieldValues>({
   name,
   control,
   label,
-  maxLength,
+  maxWords,
   ...props
 }: FormTextareaProps<T>) => {
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-          <Textarea
-            {...field}
-            {...props}
-            value={field.value ?? ""}
-            id={field.name}
-            maxLength={maxLength}
-            aria-invalid={fieldState.invalid}
-          />
-          {maxLength && (
-            <p className="text-xs text-muted-foreground text-right">
-              {(field.value ?? "").length}/{maxLength}
-            </p>
-          )}
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-        </Field>
-      )}
+      render={({ field, fieldState }) => {
+        const wordCount = (field.value ?? "")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean).length;
+
+        return (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+            <Textarea
+              {...field}
+              {...props}
+              value={field.value ?? ""}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+            />
+            {maxWords && (
+              <p className="text-xs text-muted-foreground text-right">
+                {wordCount}/{maxWords} words
+              </p>
+            )}
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        );
+      }}
     />
   );
 };

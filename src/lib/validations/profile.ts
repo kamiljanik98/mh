@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const bioSchema = z
   .string()
-  .max(800, "Bio must be at most 800 characters");
+  .refine(
+    (value) => value.trim().split(/\s+/).filter(Boolean).length <= 150,
+    "Bio must be at most 150 words",
+  );
 
 export const nicknameSchema = z
   .string()

@@ -96,7 +96,7 @@ export function EditProfileDialog() {
             control={form.control}
             label="Bio"
             placeholder="Tell people about yourself"
-            maxLength={800}
+            maxWords={150}
             rows={4}
           />
           <Button variant="secondary" type="submit" disabled={isLoading}>
