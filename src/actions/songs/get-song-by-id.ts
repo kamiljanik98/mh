@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "@/lib/supabase/server";
 import { attachIsLiked } from "@/lib/attach-is-liked";
 import { Song } from "@/types";
