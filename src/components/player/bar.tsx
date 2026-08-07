@@ -19,7 +19,7 @@ export const Bar = () => {
     <div className="z-index-5 fixed inset-x-0 bottom-0 flex justify-center border-t border-border bg-black">
       <div className="grid w-full max-w-6xl grid-cols-3 items-center px-6 py-3">
         <TrackInfo song={song} />
-        <Controls />
+        <Controls song={song} />
         <Volume />
       </div>
     </div>

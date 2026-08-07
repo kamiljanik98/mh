@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import usePlayer from "@/hooks/player/use-player";
-import { useGetSongById } from "@/hooks/songs/use-get-song-by-id";
 import { useLoadSongUrl } from "@/hooks/songs/use-load-song-url";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import type { Song } from "@/types";
 
 const SILENT_PLAY_ERRORS = ["NotAllowedError", "NotSupportedError"];
 
@@ -25,7 +25,11 @@ function mediaErrorMessage(error: MediaError | null): string | null {
   return "This track's format isn't supported by your browser";
 }
 
-export function Controls() {
+interface ControlsProps {
+  song: Song;
+}
+
+export function Controls({ song }: ControlsProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isPlaying = usePlayer((s) => s.isPlaying);
   const setIsPlaying = usePlayer((s) => s.setIsPlaying);
@@ -42,8 +46,7 @@ export function Controls() {
     (state) => state.clearPlayPauseRequest,
   );
 
-  const { song } = useGetSongById(activeId);
-  const { url, error: loadError } = useLoadSongUrl(song?.path ?? null);
+  const { url, error: loadError } = useLoadSongUrl(song.path);
 
   const attemptPlay = useCallback(() => {
     audioRef.current?.play().catch((error: unknown) => {
