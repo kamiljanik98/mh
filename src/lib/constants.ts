@@ -3,7 +3,12 @@ export const ACCEPTED_AUDIO = {
   "audio/wav": [".wav"],
   "audio/flac": [".flac"],
   "audio/ogg": [".ogg"],
-};
+} as const satisfies Record<string, readonly string[]>;
+
+export type AcceptedAudioMimeType = keyof typeof ACCEPTED_AUDIO;
+
+export const MAX_AUDIO_SIZE_MB = 200;
+export const MAX_AUDIO_SIZE_BYTES = MAX_AUDIO_SIZE_MB * 1024 * 1024;
 
 export const ACCEPTED_IMAGE = {
   "image/jpeg": [".jpg", ".jpeg"],

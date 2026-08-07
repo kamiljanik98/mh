@@ -8,18 +8,21 @@ import {
 } from "@/lib/r2/upload";
 import type { Database } from "@/types/database.types";
 import { validateImageFile } from "@/lib/validations/files";
+import {
+  ACCEPTED_AUDIO,
+  type AcceptedAudioMimeType,
+  MAX_AUDIO_SIZE_BYTES,
+  MAX_AUDIO_SIZE_MB,
+} from "@/lib/constants";
 
 type SongInsert = Database["public"]["Tables"]["songs"]["Insert"];
 type StemInsert = Database["public"]["Tables"]["stems"]["Insert"];
 type StemCategory = Database["public"]["Enums"]["stem_category"];
 
-const ALLOWED_AUDIO_TYPES = [
-  "audio/mpeg",
-  "audio/wav",
-  "audio/flac",
-  "audio/aac",
-];
-const MAX_AUDIO_BYTES = 200 * 1024 * 1024;
+function isAcceptedAudioMime(type: string): type is AcceptedAudioMimeType {
+  return type in ACCEPTED_AUDIO;
+}
+
 const STEM_CATEGORIES: StemCategory[] = [
   "vocals",
   "drums",
@@ -68,15 +71,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Title required" }, { status: 400 });
   }
 
-  if (!ALLOWED_AUDIO_TYPES.includes(audioFile.type)) {
+  if (!isAcceptedAudioMime(audioFile.type)) {
     return NextResponse.json(
       { error: "Unsupported audio format" },
       { status: 415 },
     );
   }
-  if (audioFile.size > MAX_AUDIO_BYTES) {
+  if (audioFile.size > MAX_AUDIO_SIZE_BYTES) {
     return NextResponse.json(
-      { error: "Audio file exceeds 200 MB limit" },
+      { error: `Audio file exceeds ${MAX_AUDIO_SIZE_MB} MB limit` },
       { status: 413 },
     );
   }
@@ -113,15 +116,15 @@ export async function POST(req: NextRequest) {
     if (!(file instanceof File)) {
       return NextResponse.json({ error: "Invalid stem file" }, { status: 400 });
     }
-    if (!ALLOWED_AUDIO_TYPES.includes(file.type)) {
+    if (!isAcceptedAudioMime(file.type)) {
       return NextResponse.json(
         { error: "Unsupported stem audio format" },
         { status: 415 },
       );
     }
-    if (file.size > MAX_AUDIO_BYTES) {
+    if (file.size > MAX_AUDIO_SIZE_BYTES) {
       return NextResponse.json(
-        { error: "Stem file exceeds 200 MB limit" },
+        { error: `Stem file exceeds ${MAX_AUDIO_SIZE_MB} MB limit` },
         { status: 413 },
       );
     }

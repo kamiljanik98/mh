@@ -18,12 +18,21 @@ import FormInputFileImage from "@/components/upload/form/form-input-file-image";
 import FormInputFileStem from "@/components/upload/form/form-input-file-stem";
 import useUpload from "@/hooks/upload/use-upload";
 import { uploadSchema, type UploadFormValues } from "@/lib/validations/upload";
-import { ACCEPTED_AUDIO, ACCEPTED_IMAGE } from "@/lib/constants";
 import { useRouter } from "next/navigation";
 import { XIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Field, FieldError } from "../ui/field";
+import {
+  ACCEPTED_AUDIO,
+  MAX_AUDIO_SIZE_MB,
+  ACCEPTED_IMAGE,
+} from "@/lib/constants";
+
+const audioFormatsLabel = Object.values(ACCEPTED_AUDIO)
+  .flat()
+  .map((ext) => ext.slice(1).toUpperCase())
+  .join(", ");
 
 const STEM_CATEGORIES = [
   "vocals",
@@ -171,8 +180,8 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
                 Upload your audio files.
               </h1>
               <p className="text-xs text-muted-foreground">
-                For best quality, use WAV, FLAC, AIFF, or ALAC. The maximum file
-                size is 4GB uncompressed.
+                Accepted formats: {audioFormatsLabel}. Max file size{" "}
+                {MAX_AUDIO_SIZE_MB}MB.
               </p>
             </div>
             <FormInputFileAudio
@@ -314,7 +323,7 @@ export default function UploadForm({ step, onStepChange }: UploadFormProps) {
           <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
             <p className="text-xs text-neutral-500 max-w-sm">
               By uploading, you confirm that your sounds comply with our Terms
-              of Use and you don't infringe anyone else's rights.
+              of Use and you don&apos;t infringe anyone else&apos;s rights.
             </p>
             <Button
               type="button"
