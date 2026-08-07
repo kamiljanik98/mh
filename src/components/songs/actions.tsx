@@ -1,5 +1,5 @@
 import { LikeButton } from "@/components/social/like-button";
-import { ShareButton } from "@/components/social/share-button";
+import { CopyLinkButton } from "@/components/social/copy-link-button";
 
 type ActionsProps = {
   songId: string;
@@ -10,7 +10,7 @@ export function Actions({ songId, isLikedInitially = false }: ActionsProps) {
   return (
     <div className="flex items-center gap-1">
       <LikeButton songId={songId} isLikedInitially={isLikedInitially} />
-      <ShareButton path={`/songs/${songId}`} iconOnly />
+      <CopyLinkButton path={`/songs/${songId}`} />
     </div>
   );
 }

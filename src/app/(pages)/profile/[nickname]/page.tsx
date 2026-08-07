@@ -5,7 +5,7 @@ import { getAvatarUrl } from "@/lib/r2/public";
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ShareButton } from "@/components/social/share-button";
+import { CopyLinkButton } from "@/components/social/copy-link-button";
 import { FollowButton } from "@/components/social/follow-button";
 import { ProfileList } from "@/components/social/profile-list";
 import { getProfileByNickname } from "@/actions/profile/get-profile-by-nickname";
@@ -78,7 +78,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 profileUserId={profile.id}
                 isFollowingInitially={isFollowing}
               />
-              <ShareButton path={`/profile/${profile.nickname}`} />
+              <CopyLinkButton path={`/profile/${profile.nickname}`} />
             </>
           )}
         </div>

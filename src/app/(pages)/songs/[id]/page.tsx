@@ -5,7 +5,7 @@ import { getCoverUrl, getAvatarUrl } from "@/lib/r2/public";
 import { formatSongMeta } from "@/lib/format/song-meta";
 import { LikeButton } from "@/components/social/like-button";
 import { getSongById } from "@/actions/songs/get-song-by-id";
-import { ShareButton } from "@/components/social/share-button";
+import { CopyLinkButton } from "@/components/social/copy-link-button";
 import { Waveform } from "@/components/songs/waveform";
 import { List } from "@/components/stems/list";
 
@@ -57,7 +57,7 @@ export default async function SongPage({ params }: SongPageProps) {
           </div>
           <div className="flex items-center gap-3">
             <LikeButton songId={song.id} isLikedInitially={song.isLiked} />
-            <ShareButton path={`/songs/${song.id}`} />
+            <CopyLinkButton path={`/songs/${song.id}`} />
           </div>
         </div>
       </div>

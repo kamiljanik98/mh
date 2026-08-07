@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import CopyButton from "@/components/ui/copy-button";
 import { getCoverUrl } from "@/lib/r2/public";
 import { Send } from "lucide-react";
+import { CopyLinkButton } from "@/components/social/copy-link-button";
 
 export default async function UploadSuccessPage({
   params,
@@ -56,7 +56,7 @@ export default async function UploadSuccessPage({
             value={songUrl}
             className="text-xs text-muted-foreground h-9 bg-muted"
           />
-          <CopyButton value={songUrl} />
+          <CopyLinkButton path={`/songs/${song.id}`} />
           <Button
             variant="outline"
             size="icon"
