@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { likeSong } from "@/actions/social/like-song";
 import { unlikeSong } from "@/actions/social/unlike-song";
 
 export function useLike(songId: string, isLikedInitially: boolean) {
-  const router = useRouter();
   const [isLiked, setIsLiked] = useState(isLikedInitially);
 
   async function toggle() {
@@ -22,7 +20,7 @@ export function useLike(songId: string, isLikedInitially: boolean) {
       return;
     }
 
-    router.refresh();
+    toast.success(next ? "Added to your library" : "Removed from library");
   }
 
   return { isLiked, toggle };

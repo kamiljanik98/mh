@@ -21,7 +21,10 @@ export function useFollow(targetUserId: string, isFollowingInitially: boolean) {
     if (error) {
       setIsFollowing(!next);
       toast.error(error.message);
+      return;
     }
+
+    toast.success(next ? "Following" : "Unfollowed");
   }
 
   return { isFollowing, isLoading, toggle };
