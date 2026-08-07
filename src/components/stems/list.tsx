@@ -19,7 +19,12 @@ export function List({ stems }: { stems: Stem[] }) {
       toast.error("Failed to load stem");
       return;
     }
-    window.open(url, "_blank");
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   return (

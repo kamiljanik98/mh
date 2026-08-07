@@ -17,7 +17,10 @@ export const resolveStemUrl = async (path: string) => {
   }
 
   try {
-    const url = await getPresignedUrl(path, "stems");
+    const url = await getPresignedUrl(path, {
+      bucket: "stems",
+      asAttachment: true,
+    });
     return { url, error: null };
   } catch (error) {
     return { url: null, error: error as Error };

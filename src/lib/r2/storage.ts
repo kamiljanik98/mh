@@ -9,13 +9,24 @@ const PRIVATE_BUCKETS = {
   stems: BUCKET_STEMS,
 } as const;
 
+type PresignOptions = {
+  bucket?: keyof typeof PRIVATE_BUCKETS;
+  asAttachment?: boolean;
+};
+
 export async function getPresignedUrl(
   path: string,
-  bucket: keyof typeof PRIVATE_BUCKETS = "songs",
+  { bucket = "songs", asAttachment = false }: PresignOptions = {},
 ): Promise<string> {
   return getSignedUrl(
     r2,
-    new GetObjectCommand({ Bucket: PRIVATE_BUCKETS[bucket], Key: path }),
+    new GetObjectCommand({
+      Bucket: PRIVATE_BUCKETS[bucket],
+      Key: path,
+      ...(asAttachment && {
+        ResponseContentDisposition: `attachment; filename="${path.split("/").pop() ?? path}"`,
+      }),
+    }),
     { expiresIn: 3600 },
   );
 }
